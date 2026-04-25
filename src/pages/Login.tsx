@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from "firebase/auth";
 import { auth } from "../firebase";
 import { useAuth } from "../context/AuthContext";
 
@@ -13,13 +16,35 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   const handleEmailLogin = async () => {
-    await signInWithEmailAndPassword(auth, email, password);
-    navigate("/select-role");
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/select-role");
+    } catch (error: any) {
+      alert(error.message);
+    }
   };
 
   const handleGoogleLogin = async () => {
-    await loginWithGoogle();
-    navigate("/select-role");
+    try {
+      await loginWithGoogle();
+      navigate("/select-role");
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!email) {
+      alert("Please enter your email first.");
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      alert("Password reset email sent. Please check your inbox.");
+    } catch (error: any) {
+      alert(error.message);
+    }
   };
 
   return (
@@ -31,7 +56,13 @@ export default function Login() {
         className="glass p-8 w-full max-w-sm space-y-4"
       >
         <motion.h2
-          animate={{ textShadow: ["0 0 8px #4cc9f0", "0 0 20px #4361ee", "0 0 8px #4cc9f0"] }}
+          animate={{
+            textShadow: [
+              "0 0 8px #4cc9f0",
+              "0 0 20px #4361ee",
+              "0 0 8px #4cc9f0",
+            ],
+          }}
           transition={{ duration: 3, repeat: Infinity }}
           className="text-3xl font-bold text-center text-yellow-400"
         >
@@ -57,6 +88,13 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
+        <p
+          onClick={handleResetPassword}
+          className="text-sm text-right text-yellow-400 cursor-pointer hover:underline"
+        >
+          Forgot Password?
+        </p>
 
         <motion.button
           whileHover={{ scale: 1.05 }}
