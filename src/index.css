@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------- Base Layout ---------- */
 html,
 body,
 #root {
@@ -14,25 +15,28 @@ body {
   color: white;
   background-color: #020617;
 
+  /* Reduced stars (clean look) */
   background-image:
-    radial-gradient(rgba(255,255,255,0.6) 1px, transparent 1px);
+    radial-gradient(rgba(255,255,255,0.7) 1px, transparent 1px);
 
-  background-size: 100px 100px;
+  background-size: 80px 80px;
   background-position: 0 0;
   background-repeat: repeat;
 }
 
+/* ---------- Glow Background ---------- */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(circle at 10% 10%, rgba(255,215,0,0.15), transparent 30%),
-    radial-gradient(circle at 90% 20%, rgba(59,130,246,0.15), transparent 30%),
-    radial-gradient(circle at 30% 90%, rgba(168,85,247,0.15), transparent 30%);
+    radial-gradient(circle at 10% 10%, rgba(255,215,0,0.12), transparent 30%),
+    radial-gradient(circle at 90% 20%, rgba(59,130,246,0.12), transparent 30%),
+    radial-gradient(circle at 30% 90%, rgba(168,85,247,0.12), transparent 30%);
   z-index: -1;
 }
 
+/* ---------- Glass Cards ---------- */
 .glass {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(16px);
@@ -40,4 +44,36 @@ body::before {
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.08);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+
+  transition: transform 0.3s ease,
+              box-shadow 0.3s ease,
+              border-color 0.3s ease,
+              background 0.3s ease;
+}
+
+/* 🔥 Strong Hover Effect */
+.glass:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(255, 215, 0, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 45px rgba(255, 215, 0, 0.2);
+}
+
+/* ---------- Buttons & Links ---------- */
+button,
+a {
+  transition: transform 0.25s ease,
+              box-shadow 0.25s ease,
+              background 0.25s ease;
+}
+
+/* 🔥 Button Hover */
+button:hover,
+a:hover {
+  transform: translateY(-3px);
+}
+
+/* ---------- Optional Smooth Scroll ---------- */
+html {
+  scroll-behavior: smooth;
 }
