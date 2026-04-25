@@ -1,42 +1,42 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { motion } from "framer-motion";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
-  const { loginWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const { loginWithGoogle } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleEmailLogin = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate("/select-role");
-    } catch (err: any) {
-      console.error("Login error:", err.code, err.message);
-      alert(err.message);
-    }
+    await signInWithEmailAndPassword(auth, email, password);
+    navigate("/select-role");
   };
 
   const handleGoogleLogin = async () => {
-    try {
-      await loginWithGoogle();
-      navigate("/select-role");
-    } catch (error: any) {
-      console.error("Google login error:", error.code, error.message);
-      alert(error.message);
-    }
+    await loginWithGoogle();
+    navigate("/select-role");
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
-      <div className="glass p-8 w-full max-w-sm space-y-4">
-        <h2 className="text-3xl font-bold text-center text-yellow-400">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.85, y: 50 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="glass p-8 w-full max-w-sm space-y-4"
+      >
+        <motion.h2
+          animate={{ textShadow: ["0 0 8px #4cc9f0", "0 0 20px #4361ee", "0 0 8px #4cc9f0"] }}
+          transition={{ duration: 3, repeat: Infinity }}
+          className="text-3xl font-bold text-center text-yellow-400"
+        >
           Login
-        </h2>
+        </motion.h2>
 
         <p className="text-center text-sm text-gray-300">
           Access your AI Classroom dashboard
@@ -58,21 +58,25 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={handleEmailLogin}
-          className="w-full bg-yellow-400 text-black py-3 rounded font-semibold hover:bg-yellow-300"
+          className="w-full bg-yellow-400 text-black py-3 rounded font-semibold"
         >
           Login
-        </button>
+        </motion.button>
 
         <div className="text-center text-gray-400">OR</div>
 
-        <button
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={handleGoogleLogin}
-          className="w-full border border-yellow-400/30 py-3 rounded hover:border-yellow-400"
+          className="w-full border border-yellow-400/30 py-3 rounded"
         >
           Continue with Google
-        </button>
+        </motion.button>
 
         <p className="text-center text-sm text-gray-300">
           New user?{" "}
@@ -80,13 +84,7 @@ export default function Login() {
             Sign Up
           </Link>
         </p>
-
-        <p className="text-center text-sm text-gray-300">
-          <Link to="/" className="hover:text-yellow-400">
-            Back to Home
-          </Link>
-        </p>
-      </div>
+      </motion.div>
     </div>
   );
 }

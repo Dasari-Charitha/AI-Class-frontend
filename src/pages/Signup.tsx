@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 
@@ -10,21 +11,25 @@ export default function Signup() {
   const [password, setPassword] = useState("");
 
   const handleSignup = async () => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      navigate("/select-role");
-    } catch (error: any) {
-      console.error("Signup error:", error.code, error.message);
-      alert(error.message);
-    }
+    await createUserWithEmailAndPassword(auth, email, password);
+    navigate("/select-role");
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6">
-      <div className="glass p-8 w-full max-w-sm space-y-4">
-        <h2 className="text-3xl font-bold text-center text-yellow-400">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.85, y: 50 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="glass p-8 w-full max-w-sm space-y-4"
+      >
+        <motion.h2
+          animate={{ textShadow: ["0 0 8px #4cc9f0", "0 0 20px #4361ee", "0 0 8px #4cc9f0"] }}
+          transition={{ duration: 3, repeat: Infinity }}
+          className="text-3xl font-bold text-center text-yellow-400"
+        >
           Create Account
-        </h2>
+        </motion.h2>
 
         <p className="text-center text-sm text-gray-300">
           Start your AI Classroom journey
@@ -46,12 +51,14 @@ export default function Signup() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={handleSignup}
-          className="w-full bg-yellow-400 text-black py-3 rounded font-semibold hover:bg-yellow-300"
+          className="w-full bg-yellow-400 text-black py-3 rounded font-semibold"
         >
           Sign Up
-        </button>
+        </motion.button>
 
         <p className="text-center text-sm text-gray-300">
           Already have an account?{" "}
@@ -59,13 +66,7 @@ export default function Signup() {
             Login
           </Link>
         </p>
-
-        <p className="text-center text-sm text-gray-300">
-          <Link to="/" className="hover:text-yellow-400">
-            Back to Home
-          </Link>
-        </p>
-      </div>
+      </motion.div>
     </div>
   );
 }

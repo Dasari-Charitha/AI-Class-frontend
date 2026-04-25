@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+
 import Landing from "./pages/LandingPage";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -8,25 +10,32 @@ import StudentDashboard from "./pages/StudentDashboard";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import HODDashboard from "./pages/HODDashboard";
 import PrincipalDashboard from "./pages/PrincipalDashboard";
+
 import CreateExam from "./pages/CreateExam";
 import TakeTest from "./pages/TakeTest";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import RoleBasedRoute from "./components/RoleBasedRoute.tsx";
+import AnimatedPage from "./components/AnimatedPage";
 
-export default function App() {
+function AnimatedRoutes() {
+  const location = useLocation();
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/select-role" element={<RoleSelection />} />
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<AnimatedPage><Landing /></AnimatedPage>} />
+        <Route path="/login" element={<AnimatedPage><Login /></AnimatedPage>} />
+        <Route path="/signup" element={<AnimatedPage><Signup /></AnimatedPage>} />
+        <Route path="/select-role" element={<AnimatedPage><RoleSelection /></AnimatedPage>} />
 
         <Route
           path="/student"
           element={
             <ProtectedRoute>
-              <StudentDashboard />
+              <RoleBasedRoute allowedRole="student">
+                <AnimatedPage><StudentDashboard /></AnimatedPage>
+              </RoleBasedRoute>
             </ProtectedRoute>
           }
         />
@@ -35,7 +44,9 @@ export default function App() {
           path="/teacher"
           element={
             <ProtectedRoute>
-              <TeacherDashboard />
+              <RoleBasedRoute allowedRole="teacher">
+                <AnimatedPage><TeacherDashboard /></AnimatedPage>
+              </RoleBasedRoute>
             </ProtectedRoute>
           }
         />
@@ -44,7 +55,9 @@ export default function App() {
           path="/hod"
           element={
             <ProtectedRoute>
-              <HODDashboard />
+              <RoleBasedRoute allowedRole="hod">
+                <AnimatedPage><HODDashboard /></AnimatedPage>
+              </RoleBasedRoute>
             </ProtectedRoute>
           }
         />
@@ -53,7 +66,9 @@ export default function App() {
           path="/principal"
           element={
             <ProtectedRoute>
-              <PrincipalDashboard />
+              <RoleBasedRoute allowedRole="principal">
+                <AnimatedPage><PrincipalDashboard /></AnimatedPage>
+              </RoleBasedRoute>
             </ProtectedRoute>
           }
         />
@@ -62,7 +77,7 @@ export default function App() {
           path="/create-exam"
           element={
             <ProtectedRoute>
-              <CreateExam />
+              <AnimatedPage><CreateExam /></AnimatedPage>
             </ProtectedRoute>
           }
         />
@@ -71,11 +86,19 @@ export default function App() {
           path="/take-test"
           element={
             <ProtectedRoute>
-              <TakeTest />
+              <AnimatedPage><TakeTest /></AnimatedPage>
             </ProtectedRoute>
           }
         />
       </Routes>
+    </AnimatePresence>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AnimatedRoutes />
     </BrowserRouter>
   );
 }
