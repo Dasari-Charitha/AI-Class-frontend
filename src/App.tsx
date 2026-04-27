@@ -17,6 +17,7 @@ import TakeTest from "./pages/TakeTest";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RoleBasedRoute from "./components/RoleBasedRoute.tsx";
 import AnimatedPage from "./components/AnimatedPage";
+import StudyBackground from "./components/StudyBackground";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -98,7 +99,10 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AnimatedRoutes />
+      <StudyBackground />
+      <div className="relative z-10">
+        <AnimatedRoutes />
+      </div>
     </BrowserRouter>
   );
 }
