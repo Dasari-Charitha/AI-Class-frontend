@@ -1,6 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "class",
+
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+
   theme: {
     extend: {
       colors: {
@@ -28,15 +31,18 @@ export default {
         danger: "#C0392B",
         info: "#2980B9",
       },
+
       boxShadow: {
         gold: "0 8px 30px rgba(184, 134, 11, 0.14)",
         goldHover: "0 18px 45px rgba(184, 134, 11, 0.25)",
       },
+
       fontFamily: {
         sans: ["Calibri", "Segoe UI", "sans-serif"],
         display: ["Georgia", "Playfair Display", "serif"],
       },
     },
   },
+
   plugins: [],
 };

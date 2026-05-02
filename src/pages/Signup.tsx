@@ -1,72 +1,38 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
+import ThemeToggle from "../components/ThemeToggle";
 
 export default function Signup() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSignup = async () => {
-    await createUserWithEmailAndPassword(auth, email, password);
-    navigate("/select-role");
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center px-6">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.85, y: 50 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="glass p-8 w-full max-w-sm space-y-4"
-      >
-        <motion.h2
-          animate={{ textShadow: ["0 0 8px #4cc9f0", "0 0 20px #4361ee", "0 0 8px #4cc9f0"] }}
-          transition={{ duration: 3, repeat: Infinity }}
-          className="text-3xl font-bold text-center text-yellow-400"
-        >
+    <div className="min-h-screen flex items-center justify-center bg-black text-white">
+      <div className="glass p-8 rounded-xl w-96">
+        <div className="flex justify-end mb-3">
+          <ThemeToggle />
+        </div>
+
+        <h1 className="text-2xl font-bold text-yellow-400 mb-4">
           Create Account
-        </motion.h2>
+        </h1>
 
-        <p className="text-center text-sm text-gray-300">
-          Start your AI Classroom journey
-        </p>
+        <input placeholder="Name" className="input" />
+        <input placeholder="Email" className="input mt-2" />
+        <input placeholder="Password" className="input mt-2" />
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full p-3 rounded bg-gray-800/80 border border-white/10 outline-none"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-3 rounded bg-gray-800/80 border border-white/10 outline-none"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleSignup}
-          className="w-full bg-yellow-400 text-black py-3 rounded font-semibold"
+        <button
+          onClick={() => navigate("/login")}
+          className="w-full bg-yellow-400 text-black py-2 rounded-lg font-semibold mt-4"
         >
-          Sign Up
-        </motion.button>
+          Register
+        </button>
 
-        <p className="text-center text-sm text-gray-300">
-          Already have an account?{" "}
-          <Link to="/login" className="text-yellow-400 hover:underline">
-            Login
-          </Link>
+        <p
+          onClick={() => navigate("/login")}
+          className="mt-4 text-center cursor-pointer text-yellow-400"
+        >
+          Already have an account?
         </p>
-      </motion.div>
+      </div>
     </div>
   );
 }
