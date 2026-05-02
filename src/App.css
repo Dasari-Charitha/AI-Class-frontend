@@ -1,5 +1,23 @@
-#root {
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
+body {
+  color: #0f172a;
+}
+
+.dark body {
+  color: #ffffff;
+}
+
+.recharts-text {
+  fill: #334155 !important;
+}
+
+.dark .recharts-text {
+  fill: #e5e7eb !important;
+}
+
+.recharts-cartesian-axis-tick-value {
+  fill: #334155 !important;
+}
+
+.dark .recharts-cartesian-axis-tick-value {
+  fill: #e5e7eb !important;
 }

@@ -21,7 +21,7 @@ export default function Landing() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-950 dark:bg-[#070b16] dark:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-950 transition-colors duration-300 dark:bg-[#070b16] dark:text-white">
       {/* NAVBAR */}
       <nav className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-[#070b16]/80">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
@@ -31,10 +31,16 @@ export default function Landing() {
           </h1>
 
           <div className="hidden items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300 md:flex">
-            <a href="#features" className="hover:text-blue-600 dark:hover:text-blue-400">
+            <a
+              href="#features"
+              className="hover:text-blue-600 dark:hover:text-blue-400"
+            >
               Features
             </a>
-            <a href="#how" className="hover:text-blue-600 dark:hover:text-blue-400">
+            <a
+              href="#how"
+              className="hover:text-blue-600 dark:hover:text-blue-400"
+            >
               How it Works
             </a>
           </div>
@@ -85,14 +91,14 @@ export default function Landing() {
             <div className="mt-8 flex flex-wrap gap-4">
               <button
                 onClick={() => navigate("/signup")}
-                className="rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 px-7 py-4 font-black text-white shadow-xl shadow-blue-600/20 hover:-translate-y-1"
+                className="rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 px-7 py-4 font-black text-white shadow-xl shadow-blue-600/20 transition hover:-translate-y-1"
               >
                 Start for Free →
               </button>
 
               <button
                 onClick={() => navigate("/login")}
-                className="rounded-2xl border border-slate-300 bg-white px-7 py-4 font-bold text-slate-900 hover:-translate-y-1 hover:border-blue-500 dark:border-white/10 dark:bg-white/5 dark:text-white"
+                className="rounded-2xl border border-slate-300 bg-white px-7 py-4 font-bold text-slate-900 transition hover:-translate-y-1 hover:border-blue-500 dark:border-white/10 dark:bg-white/5 dark:text-white"
               >
                 Sign In
               </button>
@@ -105,7 +111,9 @@ export default function Landing() {
                 ["AI", "Insights"],
               ].map(([value, label]) => (
                 <div key={label}>
-                  <h3 className="text-3xl font-black">{value}</h3>
+                  <h3 className="text-3xl font-black text-slate-900 dark:text-white">
+                    {value}
+                  </h3>
                   <p className="text-sm text-slate-500 dark:text-slate-400">
                     {label}
                   </p>
@@ -117,10 +125,10 @@ export default function Landing() {
           {/* Dashboard Preview */}
           <div className="page-animate">
             <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-2xl shadow-blue-600/10 dark:border-white/10 dark:bg-[#0f172a]">
-              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 dark:border-white/10 dark:bg-white/5">
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 text-slate-900 dark:border-white/10 dark:bg-white/5 dark:text-white">
                 <div className="flex items-center justify-between">
                   <h3 className="font-black">Attendance Tracker</h3>
-                  <span className="rounded-full bg-green-500/10 px-3 py-1 text-xs font-bold text-green-500">
+                  <span className="rounded-full bg-green-500/10 px-3 py-1 text-xs font-bold text-green-600 dark:text-green-400">
                     Live
                   </span>
                 </div>
@@ -135,19 +143,25 @@ export default function Landing() {
               </div>
 
               <div className="mt-4 grid grid-cols-2 gap-4">
-                <div className="rounded-3xl bg-slate-950 p-5 text-white dark:bg-black">
-                  <p className="text-sm text-slate-300">Class Analytics</p>
-                  <h3 className="mt-2 text-3xl font-black text-blue-400">
+                <div className="rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-[#020617] dark:text-white">
+                  <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-300">
+                    Class Analytics
+                  </h2>
+
+                  <p className="mt-2 text-4xl font-black text-blue-600 dark:text-blue-400">
                     87%
-                  </h3>
-                  <p className="text-xs text-slate-400">Average Score</p>
+                  </p>
+
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                    Average Score
+                  </p>
                 </div>
 
-                <div className="rounded-3xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-white/5">
+                <div className="rounded-3xl border border-slate-200 bg-white/90 p-5 text-slate-900 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-[#020617] dark:text-white">
                   <p className="text-sm text-slate-500 dark:text-slate-400">
                     ⏱️ Live Test
                   </p>
-                  <h3 className="mt-2 text-xl font-black text-red-500">
+                  <h3 className="mt-2 text-xl font-black text-red-600 dark:text-red-400">
                     LIVE
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -156,10 +170,10 @@ export default function Landing() {
                 </div>
               </div>
 
-              <div className="mt-4 rounded-3xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-white/5">
+              <div className="mt-4 rounded-3xl border border-slate-200 bg-white/90 p-5 text-slate-900 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-[#020617] dark:text-white">
                 <div className="mb-4 flex items-center justify-between">
                   <h3 className="font-black">Today’s Timetable</h3>
-                  <span className="text-xs font-bold text-blue-500">
+                  <span className="text-xs font-bold text-blue-600 dark:text-blue-400">
                     Working Day
                   </span>
                 </div>
@@ -171,17 +185,21 @@ export default function Landing() {
                 ].map(([subject, time]) => (
                   <div
                     key={subject}
-                    className="mb-3 flex justify-between rounded-2xl bg-slate-100 p-3 text-sm dark:bg-white/10"
+                    className="mb-3 flex justify-between rounded-2xl bg-slate-100 p-3 text-sm text-slate-800 dark:bg-white/10 dark:text-slate-100"
                   >
                     <span>{subject}</span>
-                    <span className="font-bold text-blue-500">{time}</span>
+                    <span className="font-bold text-blue-600 dark:text-blue-400">
+                      {time}
+                    </span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-4 rounded-3xl bg-gradient-to-r from-blue-600 to-purple-600 p-5 text-white">
-                <p className="text-sm font-bold">AI Suggestion</p>
-                <h3 className="mt-1 text-xl font-black">
+              <div className="mt-4 rounded-3xl border border-slate-200 bg-white/90 p-5 text-slate-900 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-[#020617] dark:text-white">
+                <p className="text-sm font-bold text-blue-600 dark:text-blue-400">
+                  AI Suggestion
+                </p>
+                <h3 className="mt-1 text-xl font-black text-slate-900 dark:text-white">
                   Focus on weak areas this week
                 </h3>
               </div>
@@ -191,9 +209,12 @@ export default function Landing() {
       </section>
 
       {/* FEATURES */}
-      <section id="features" className="mx-auto max-w-7xl px-6 py-20 scroll-mt-24">
+      <section
+        id="features"
+        className="mx-auto max-w-7xl scroll-mt-24 px-6 py-20"
+      >
         <div className="mb-12 text-center">
-          <h2 className="text-4xl font-black md:text-5xl">
+          <h2 className="text-4xl font-black text-slate-900 dark:text-white md:text-5xl">
             Everything for a smart institution
           </h2>
           <p className="mt-4 text-slate-600 dark:text-slate-300">
@@ -205,7 +226,7 @@ export default function Landing() {
           {features.map(([icon, title, desc]) => (
             <div
               key={title}
-              className="card-hover rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5"
+              className="card-hover rounded-3xl border border-slate-200 bg-white p-6 text-slate-900 shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-white"
             >
               <div className="mb-4 text-3xl">{icon}</div>
               <h3 className="text-xl font-black text-blue-600 dark:text-blue-400">
@@ -220,9 +241,14 @@ export default function Landing() {
       </section>
 
       {/* HOW */}
-      <section id="how" className="mx-auto max-w-7xl px-6 py-20 scroll-mt-24">
+      <section
+        id="how"
+        className="mx-auto max-w-7xl scroll-mt-24 px-6 py-20"
+      >
         <div className="mb-12 text-center">
-          <h2 className="text-4xl font-black md:text-5xl">How it Works</h2>
+          <h2 className="text-4xl font-black text-slate-900 dark:text-white md:text-5xl">
+            How it Works
+          </h2>
           <p className="mt-4 text-slate-600 dark:text-slate-300">
             Simple workflow for every academic role
           </p>
@@ -232,12 +258,14 @@ export default function Landing() {
           {steps.map(([num, title, desc]) => (
             <div
               key={num}
-              className="card-hover rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-white/5"
+              className="card-hover rounded-3xl border border-slate-200 bg-white p-6 text-slate-900 shadow-sm dark:border-white/10 dark:bg-white/5 dark:text-white"
             >
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 font-black text-white">
                 {num}
               </div>
-              <h3 className="font-black">{title}</h3>
+              <h3 className="font-black text-slate-900 dark:text-white">
+                {title}
+              </h3>
               <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
                 {desc}
               </p>
@@ -248,25 +276,25 @@ export default function Landing() {
 
       {/* CTA */}
       <section className="px-6 py-20">
-        <div className="mx-auto max-w-5xl rounded-[2rem] bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-16 text-center text-white shadow-2xl shadow-blue-600/20">
+        <div className="mx-auto max-w-5xl rounded-[2rem] border border-slate-200 bg-white/90 px-8 py-16 text-center text-slate-900 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-gradient-to-r dark:from-blue-600 dark:to-purple-600 dark:text-white">
           <h2 className="text-4xl font-black md:text-5xl">
             Ready to transform your classroom?
           </h2>
-          <p className="mt-4 text-blue-50">
+          <p className="mt-4 text-slate-600 dark:text-blue-50">
             Build smarter academic workflows with AI classroom intelligence.
           </p>
 
           <div className="mt-8 flex justify-center gap-4">
             <button
               onClick={() => navigate("/signup")}
-              className="rounded-2xl bg-white px-7 py-4 font-black text-blue-600 hover:-translate-y-1"
+              className="rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 px-7 py-4 font-black text-white transition hover:-translate-y-1 dark:bg-white dark:from-white dark:to-white dark:text-blue-600"
             >
               Get Started Free →
             </button>
 
             <button
               onClick={() => navigate("/login")}
-              className="rounded-2xl border border-white/40 px-7 py-4 font-bold text-white hover:-translate-y-1 hover:bg-white hover:text-blue-600"
+              className="rounded-2xl border border-slate-300 px-7 py-4 font-bold text-slate-900 transition hover:-translate-y-1 hover:bg-slate-100 dark:border-white/40 dark:text-white dark:hover:bg-white dark:hover:text-blue-600"
             >
               Sign In
             </button>

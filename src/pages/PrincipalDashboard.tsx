@@ -22,6 +22,8 @@ type PrincipalData = {
   chartData: { name: string; value: number }[];
 };
 
+type TabType = "dashboard" | "leaves" | "alerts" | "performance";
+
 const smartAlerts = [
   "12 students are below 75% attendance",
   "CSE department has highest performance this week",
@@ -29,12 +31,28 @@ const smartAlerts = [
 ];
 
 const card =
-  "card-hover rounded-3xl border border-white/10 bg-white/80 p-6 shadow-xl backdrop-blur-xl dark:bg-white/10";
+  "card-hover rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl transition dark:border-white/10 dark:bg-white/10 dark:text-white";
 
 const inner =
-  "rounded-2xl border border-white/10 bg-slate-100/80 p-4 dark:bg-black/30";
+  "rounded-2xl border border-slate-200 bg-slate-100/90 p-4 text-slate-800 dark:border-white/10 dark:bg-black/30 dark:text-slate-100";
+
+const SectionHeader = ({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) => (
+  <div className="mb-6 rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-white">
+    <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+      {title}
+    </h2>
+    <p className="mt-2 text-slate-600 dark:text-slate-300">{description}</p>
+  </div>
+);
 
 export default function PrincipalDashboard() {
+  const [activeTab, setActiveTab] = useState<TabType>("dashboard");
   const [data, setData] = useState<PrincipalData | null>(null);
   const [leaveOverview, setLeaveOverview] = useState<LeaveRequest[]>([]);
 
@@ -56,10 +74,23 @@ export default function PrincipalDashboard() {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const customEvent = e as CustomEvent<TabType>;
+      setActiveTab(customEvent.detail);
+    };
+
+    window.addEventListener("principalTabChange", handler);
+
+    return () => {
+      window.removeEventListener("principalTabChange", handler);
+    };
+  }, []);
+
   if (!data) {
     return (
       <MainLayout>
-        <p className="text-gray-300">Loading...</p>
+        <p className="text-slate-700 dark:text-slate-200">Loading...</p>
       </MainLayout>
     );
   }
@@ -77,145 +108,185 @@ export default function PrincipalDashboard() {
 
   return (
     <MainLayout>
-      <div className="mb-8 rounded-[2rem] bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white shadow-2xl">
-        <p className="text-sm font-semibold text-blue-100">
+      <div className="mb-8 rounded-[2rem] border border-slate-200 bg-white/90 p-8 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-gradient-to-r dark:from-blue-600 dark:to-purple-600 dark:text-white">
+        <p className="text-sm font-semibold text-blue-600 dark:text-blue-100">
           Principal Dashboard
         </p>
         <h1 className="mt-2 text-4xl font-black">{data.name}</h1>
-        <p className="mt-2 text-blue-100">
-          Institution-wide analytics, academic health monitoring, leave
-          overview and smart alerts.
+        <p className="mt-2 text-slate-600 dark:text-blue-100">
+          Institution-wide analytics, academic health monitoring, leave overview
+          and smart alerts.
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-5">
-        <DayStatusCard />
+      {activeTab === "dashboard" && (
+        <>
+          <SectionHeader
+            title="Institution Overview"
+            description="Institution-wide overview of students, faculty, departments and academic performance."
+          />
 
-        <div className={card}>
-          <p className="text-sm text-slate-500 dark:text-slate-300">
-            Total Students
-          </p>
-          <h2 className="mt-2 text-3xl font-black">{data.totalStudents}</h2>
-        </div>
+          <div className="grid gap-6 md:grid-cols-5">
+            <DayStatusCard />
 
-        <div className={card}>
-          <p className="text-sm text-slate-500 dark:text-slate-300">Faculty</p>
-          <h2 className="mt-2 text-3xl font-black">{data.faculty}</h2>
-        </div>
-
-        <div className={card}>
-          <p className="text-sm text-slate-500 dark:text-slate-300">
-            Departments
-          </p>
-          <h2 className="mt-2 text-3xl font-black">{data.departments}</h2>
-        </div>
-
-        <div className={card}>
-          <p className="text-sm text-slate-500 dark:text-slate-300">
-            Performance
-          </p>
-          <h2 className="mt-2 text-3xl font-black">
-            {data.institutionPerformance}%
-          </h2>
-        </div>
-      </div>
-
-      <div className="mt-6 grid gap-6 md:grid-cols-2">
-        <ProgressCard
-          label="Institution Performance"
-          value={data.institutionPerformance}
-        />
-        <Notifications />
-      </div>
-
-      <AIInsights role="principal" />
-
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <div className={card}>
-          <h2 className="mb-4 text-xl font-black text-blue-600 dark:text-blue-300">
-            Leave Overview
-          </h2>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className={inner}>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Total Leaves
+            <div className={card}>
+              <p className="text-sm text-slate-600 dark:text-slate-300">
+                Total Students
               </p>
-              <h3 className="text-3xl font-black">{totalLeaves}</h3>
+              <h2 className="mt-2 text-3xl font-black">
+                {data.totalStudents}
+              </h2>
             </div>
 
-            <div className={inner}>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Pending
+            <div className={card}>
+              <p className="text-sm text-slate-600 dark:text-slate-300">
+                Faculty
               </p>
-              <h3 className="text-3xl font-black text-blue-500">
-                {pendingLeaves}
-              </h3>
+              <h2 className="mt-2 text-3xl font-black">{data.faculty}</h2>
             </div>
 
-            <div className={inner}>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Approved
+            <div className={card}>
+              <p className="text-sm text-slate-600 dark:text-slate-300">
+                Departments
               </p>
-              <h3 className="text-3xl font-black text-green-500">
-                {approvedLeaves}
-              </h3>
+              <h2 className="mt-2 text-3xl font-black">{data.departments}</h2>
             </div>
 
-            <div className={inner}>
-              <p className="text-sm text-slate-500 dark:text-slate-400">
-                Rejected
+            <div className={card}>
+              <p className="text-sm text-slate-600 dark:text-slate-300">
+                Performance
               </p>
-              <h3 className="text-3xl font-black text-red-500">
-                {rejectedLeaves}
-              </h3>
+              <h2 className="mt-2 text-3xl font-black">
+                {data.institutionPerformance}%
+              </h2>
             </div>
           </div>
-        </div>
 
-        <div className={card}>
-          <h2 className="mb-4 text-xl font-black text-purple-600 dark:text-purple-300">
-            Smart Institutional Alerts
-          </h2>
+          <div className="mt-6 grid gap-6 md:grid-cols-2">
+            <ProgressCard
+              label="Institution Performance"
+              value={data.institutionPerformance}
+            />
+            <Notifications />
+          </div>
 
-          <div className="space-y-3">
-            {smartAlerts.map((alert, index) => (
-              <div key={index} className={inner}>
-                {alert}
+          <AIInsights role="principal" />
+        </>
+      )}
+
+      {activeTab === "leaves" && (
+        <>
+          <SectionHeader
+            title="Leave Overview"
+            description="Monitor leave statistics across the institution including pending, approved and rejected requests."
+          />
+
+          <div className={card}>
+            <h2 className="mb-4 text-xl font-black text-blue-600 dark:text-blue-300">
+              Leave Statistics
+            </h2>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className={inner}>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Total Leaves
+                </p>
+                <h3 className="text-3xl font-black">{totalLeaves}</h3>
               </div>
-            ))}
+
+              <div className={inner}>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Pending
+                </p>
+                <h3 className="text-3xl font-black text-blue-600 dark:text-blue-400">
+                  {pendingLeaves}
+                </h3>
+              </div>
+
+              <div className={inner}>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Approved
+                </p>
+                <h3 className="text-3xl font-black text-green-600 dark:text-green-400">
+                  {approvedLeaves}
+                </h3>
+              </div>
+
+              <div className={inner}>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Rejected
+                </p>
+                <h3 className="text-3xl font-black text-red-600 dark:text-red-400">
+                  {rejectedLeaves}
+                </h3>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
 
-      <div className={`mt-6 ${card}`}>
-        <Charts
-          title1="Institution Growth"
-          title2="Monthly Performance"
-          data={data.chartData}
-        />
-      </div>
+      {activeTab === "alerts" && (
+        <>
+          <SectionHeader
+            title="Smart Institutional Alerts"
+            description="Review important institutional alerts and areas that require academic attention."
+          />
 
-      <div className="mt-6 grid gap-6 md:grid-cols-3">
-        <div className={card}>
-          <h2 className="mb-2 text-xl font-black text-blue-600 dark:text-blue-300">
-            Institutional Health Index
-          </h2>
-          <p className="text-3xl font-black">{data.healthIndex}/100</p>
-        </div>
+          <div className={card}>
+            <h2 className="mb-4 text-xl font-black text-purple-600 dark:text-purple-300">
+              Active Alerts
+            </h2>
 
-        <div className="card-hover rounded-3xl bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white shadow-2xl">
-          <h2 className="mb-2 text-xl font-black">Critical Alerts</h2>
-          <p className="text-3xl font-black">{data.criticalAlerts}</p>
-        </div>
+            <div className="space-y-3">
+              {smartAlerts.map((alert, index) => (
+                <div key={index} className={inner}>
+                  {alert}
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
 
-        <div className={card}>
-          <h2 className="mb-2 text-xl font-black text-purple-600 dark:text-purple-300">
-            Top Department
-          </h2>
-          <p className="text-3xl font-black">{data.topDepartment}</p>
-        </div>
-      </div>
+      {activeTab === "performance" && (
+        <>
+          <SectionHeader
+            title="Institution Performance"
+            description="Track institutional growth, health index, critical alerts and top department performance."
+          />
+
+          <div className={card}>
+            <Charts
+              title1="Institution Growth"
+              title2="Monthly Performance"
+              data={data.chartData}
+            />
+          </div>
+
+          <div className="mt-6 grid gap-6 md:grid-cols-3">
+            <div className={card}>
+              <h2 className="mb-2 text-xl font-black text-blue-600 dark:text-blue-300">
+                Institutional Health Index
+              </h2>
+              <p className="text-3xl font-black">{data.healthIndex}/100</p>
+            </div>
+
+            <div className={card}>
+              <h2 className="mb-2 text-xl font-black text-red-600 dark:text-red-300">
+                Critical Alerts
+              </h2>
+              <p className="text-3xl font-black">{data.criticalAlerts}</p>
+            </div>
+
+            <div className={card}>
+              <h2 className="mb-2 text-xl font-black text-purple-600 dark:text-purple-300">
+                Top Department
+              </h2>
+              <p className="text-3xl font-black">{data.topDepartment}</p>
+            </div>
+          </div>
+        </>
+      )}
     </MainLayout>
   );
 }

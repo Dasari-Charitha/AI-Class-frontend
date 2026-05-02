@@ -1,6 +1,4 @@
-const holidays = ["2026-01-26", "2026-08-15", "2026-10-02"];
-
-const getDayStatus = () => {
+export const getCurrentDayStatus = () => {
   const today = new Date();
 
   const dayName = today.toLocaleDateString("en-US", {
@@ -8,57 +6,43 @@ const getDayStatus = () => {
   });
 
   const fullDate = today.toLocaleDateString("en-US", {
-    day: "numeric",
     month: "long",
+    day: "numeric",
     year: "numeric",
   });
 
-  const dateKey = today.toISOString().split("T")[0];
-
   const isSunday = dayName === "Sunday";
-  const isHoliday = holidays.includes(dateKey);
-  const isWorkingDay = !isSunday && !isHoliday;
 
   return {
     dayName,
     fullDate,
-    dateKey,
-    isWorkingDay,
-    statusText: isWorkingDay ? "Working Day" : "Leave Day",
-    reason: isSunday
-      ? "Sunday Holiday"
-      : isHoliday
-      ? "Institution Holiday"
-      : "Regular Academic Day",
+    isWorkingDay: !isSunday,
+    status: isSunday ? "Leave Day" : "Working Day",
+    message: isSunday ? "Weekly Holiday" : "Regular Academic Day",
   };
 };
 
-export const getCurrentDayStatus = getDayStatus;
-
 export default function DayStatusCard() {
-  const dayStatus = getDayStatus();
+  const dayStatus = getCurrentDayStatus();
 
   return (
-    <div className="glass p-6 hover:scale-105 transition-transform">
-      <p className="text-gray-400">Today</p>
+    <div className="card-hover rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-white">
+      <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">
+        Today
+      </p>
 
-      <h2 className="text-2xl font-bold text-yellow-400">
+      <h2 className="mt-2 text-2xl font-black text-slate-900 dark:text-white">
         {dayStatus.dayName}
       </h2>
 
-      <p className="text-sm text-gray-300 mt-1">
+      <p className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-300">
         📅 {dayStatus.fullDate}
       </p>
 
-      <p
-        className={`mt-2 font-semibold ${
-          dayStatus.isWorkingDay ? "text-green-400" : "text-red-400"
-        }`}
-      >
-        {dayStatus.statusText}
-      </p>
-
-      <p className="text-sm text-gray-400 mt-1">{dayStatus.reason}</p>
+      <div className="mt-4 rounded-2xl bg-blue-100 px-4 py-3 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300">
+        <p className="font-black">{dayStatus.status}</p>
+        <p className="text-sm">{dayStatus.message}</p>
+      </div>
     </div>
   );
 }

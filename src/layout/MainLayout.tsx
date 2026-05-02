@@ -1,94 +1,172 @@
 import type { ReactNode } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { useAuth } from "../context/AuthContext";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 
-export default function MainLayout({ children }: { children: ReactNode }) {
-  const { logout, role } = useAuth();
+type MainLayoutProps = {
+  children: ReactNode;
+};
+
+const roleTabs = {
+  student: [
+    { id: "dashboard", label: "Dashboard", icon: "📊" },
+    { id: "classes", label: "Classes", icon: "📚" },
+    { id: "attendance", label: "Attendance", icon: "📈" },
+    { id: "leave", label: "Leave Application", icon: "📝" },
+    { id: "exams", label: "Exams", icon: "🧪" },
+    { id: "performance", label: "Performance", icon: "🏆" },
+  ],
+  teacher: [
+    { id: "dashboard", label: "Dashboard", icon: "📊" },
+    { id: "classes", label: "Classes", icon: "📚" },
+    { id: "leaves", label: "Leave Requests", icon: "📝" },
+    { id: "actions", label: "Actions", icon: "⚙️" },
+    { id: "performance", label: "Performance", icon: "📈" },
+  ],
+  hod: [
+    { id: "dashboard", label: "Dashboard", icon: "📊" },
+    { id: "leaves", label: "Leave Monitoring", icon: "📝" },
+    { id: "timetable", label: "Timetable", icon: "📚" },
+    { id: "performance", label: "Performance", icon: "📈" },
+  ],
+  principal: [
+    { id: "dashboard", label: "Dashboard", icon: "📊" },
+    { id: "leaves", label: "Leave Overview", icon: "📝" },
+    { id: "alerts", label: "Smart Alerts", icon: "🚨" },
+    { id: "performance", label: "Performance", icon: "📈" },
+  ],
+};
+
+export default function MainLayout({ children }: MainLayoutProps) {
+  const location = useLocation();
   const navigate = useNavigate();
 
-  const links = [
-    { to: "/student", label: "Student Dashboard", role: "student" },
-    { to: "/teacher", label: "Teacher Dashboard", role: "teacher" },
-    { to: "/hod", label: "HOD Dashboard", role: "hod" },
-    { to: "/principal", label: "Principal Dashboard", role: "principal" },
-  ];
+  const role = location.pathname.includes("teacher")
+    ? "teacher"
+    : location.pathname.includes("principal")
+    ? "principal"
+    : location.pathname.includes("hod")
+    ? "hod"
+    : "student";
 
-  const visibleLinks = links.filter((item) => item.role === role);
+  const currentRole =
+    role === "teacher"
+      ? "Teacher Dashboard"
+      : role === "principal"
+      ? "Principal Dashboard"
+      : role === "hod"
+      ? "HOD Dashboard"
+      : "Student Dashboard";
 
-  const handleLogout = async () => {
-    await logout();
+  const handleLogout = () => {
+    localStorage.removeItem("role");
     navigate("/login");
   };
 
+  const changeTab = (tabId: string) => {
+    window.dispatchEvent(
+      new CustomEvent(`${role}TabChange`, { detail: tabId })
+    );
+  };
+
   return (
-    <div className="relative min-h-screen flex app-bg text-white transition">
-      {/* Visible animated background */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-120px] left-[-120px] w-[420px] h-[420px] rounded-full bg-blue-600/40 blur-3xl animate-pulse" />
-        <div className="absolute top-[20%] right-[-140px] w-[460px] h-[460px] rounded-full bg-purple-600/35 blur-3xl animate-pulse" />
-        <div className="absolute bottom-[-160px] left-[35%] w-[520px] h-[520px] rounded-full bg-cyan-500/25 blur-3xl animate-pulse" />
-
-        <div className="absolute inset-0 opacity-[0.12] bg-[linear-gradient(rgba(96,165,250,0.55)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.45)_1px,transparent_1px)] bg-[size:80px_80px] animate-[gridMove_22s_linear_infinite]" />
-      </div>
-
-      <motion.aside
-        initial={{ x: -80, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.55 }}
-        className="relative z-10 w-64 hidden md:flex flex-col p-6 bg-white/10 backdrop-blur-2xl border-r border-white/10"
-      >
-        <h1 className="text-xl font-bold mb-8 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-          AI Classroom
-        </h1>
-
-        <nav className="flex flex-col gap-3 text-gray-300">
-          {visibleLinks.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className="rounded-xl px-4 py-3 hover:bg-white/10 hover:text-blue-300 hover:translate-x-2 transition"
-            >
-              {item.label}
-            </Link>
-          ))}
-
-          <button
-            onClick={() => navigate("/login")}
-            className="text-left rounded-xl px-4 py-3 hover:bg-white/10 hover:text-blue-300 transition"
-          >
-            Switch Role
-          </button>
-        </nav>
-
-        <button
-          onClick={handleLogout}
-          className="mt-auto w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold"
-        >
-          Logout
-        </button>
-      </motion.aside>
-
-      <motion.main
-        initial={{ opacity: 0, y: 25 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45 }}
-        className="relative z-10 flex-1 p-6 page-animate"
-      >
-        <div className="flex justify-between items-center mb-6">
+    <div className="min-h-screen bg-slate-100 text-slate-900 transition-colors duration-300 dark:bg-[#020617] dark:text-white">
+      <div className="flex min-h-screen">
+        <aside className="hidden w-72 flex-col justify-between border-r border-slate-200 bg-white/90 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-white/10 lg:flex">
           <div>
-            <h2 className="text-xl font-semibold text-white">Dashboard</h2>
-            <p className="text-sm text-gray-300">
-              AI Classroom Intelligence System
-            </p>
+            <div className="mb-10 flex items-center gap-3">
+              <div className="rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 p-3 text-2xl text-white shadow-lg">
+                🎓
+              </div>
+
+              <div>
+                <h1 className="text-xl font-black text-slate-900 dark:text-white">
+                  AI Classroom
+                </h1>
+                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
+                  Intelligence System
+                </p>
+              </div>
+            </div>
+
+            <nav className="space-y-2">
+              {roleTabs[role].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => changeTab(tab.id)}
+                  className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-blue-100 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white"
+                >
+                  <span>{tab.icon}</span>
+                  {tab.label}
+                </button>
+              ))}
+            </nav>
           </div>
 
-          <ThemeToggle />
-        </div>
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-3 rounded-2xl bg-red-100 px-4 py-3 font-bold text-red-600 transition hover:bg-red-200 dark:bg-red-500/20 dark:text-red-300 dark:hover:bg-red-500/30"
+          >
+            <span>🚪</span>
+            Logout
+          </button>
+        </aside>
 
-        {children}
-      </motion.main>
+        <main className="flex-1">
+          <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 px-6 py-4 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-[#020617]/90">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">
+                  Dashboard
+                </p>
+                <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+                  {currentRole}
+                </h2>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <ThemeToggle />
+
+                <Link
+                  to="/roles"
+                  className="hidden rounded-xl border border-slate-300 bg-white px-4 py-2 font-semibold text-slate-800 shadow-sm transition hover:bg-blue-50 dark:border-white/10 dark:bg-white/10 dark:text-white md:block"
+                >
+                  🔄 Switch Roles
+                </Link>
+              </div>
+            </div>
+          </header>
+
+          <div className="border-b border-slate-200 bg-white/90 px-4 py-3 dark:border-white/10 dark:bg-white/10 lg:hidden">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 p-2 text-xl text-white">
+                  🎓
+                </div>
+
+                <div>
+                  <h1 className="text-base font-black text-slate-900 dark:text-white">
+                    AI Classroom
+                  </h1>
+                  <p className="text-xs text-slate-600 dark:text-slate-300">
+                    Intelligence System
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={handleLogout}
+                className="rounded-xl bg-red-100 px-3 py-2 text-sm font-bold text-red-600 dark:bg-red-500/20 dark:text-red-300"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+
+          <section className="p-4 text-slate-900 dark:text-white md:p-8">
+            {children}
+          </section>
+        </main>
+      </div>
     </div>
   );
 }
