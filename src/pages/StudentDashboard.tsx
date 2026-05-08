@@ -53,16 +53,16 @@ const examsToday = [
 ];
 
 const cardClass =
-  "card-hover rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl transition dark:border-white/10 dark:bg-white/10 dark:text-white";
+  "card-hover rounded-3xl border border-slate-200/60 bg-white/90 p-6 text-slate-900 shadow-card backdrop-blur-xl transition dark:border-gold-600/8 dark:bg-[#111B33] dark:text-white";
 
 const innerCardClass =
-  "rounded-2xl border border-slate-200 bg-slate-100/90 p-4 text-slate-800 dark:border-white/10 dark:bg-black/30 dark:text-slate-100";
+  "card-hover rounded-2xl border border-slate-200/40 bg-slate-50 p-4 text-slate-800 dark:border-gold-600/8 dark:bg-[#0D1526] dark:text-slate-100";
 
 const buttonClass =
-  "rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-5 py-2 font-semibold text-white shadow-md transition hover:scale-105 hover:shadow-lg";
+  "rounded-xl bg-gradient-to-r from-gold-600 to-gold-400 px-5 py-2 font-semibold text-navy-900 shadow-md shadow-gold-600/15 transition hover:scale-105 hover:shadow-gold-600/25";
 
 const inputClass =
-  "w-full rounded-xl border border-slate-300 bg-white p-3 text-slate-900 placeholder:text-slate-400 backdrop-blur-xl focus:border-blue-400 focus:ring-2 focus:ring-blue-500/30 dark:border-white/20 dark:bg-white/10 dark:text-white dark:placeholder:text-gray-400";
+  "w-full rounded-xl border border-slate-300 bg-white p-3 text-slate-900 placeholder:text-slate-400 backdrop-blur-xl focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-white/10 dark:bg-[#0D1526] dark:text-white dark:placeholder:text-slate-500";
 
 const SectionHeader = ({
   title,
@@ -71,11 +71,11 @@ const SectionHeader = ({
   title: string;
   description: string;
 }) => (
-  <div className="mb-6 rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-white">
-    <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+  <div className="card-hover mb-6 rounded-3xl border border-slate-200/60 bg-white/90 p-6 text-slate-900 shadow-card backdrop-blur-xl dark:border-gold-600/8 dark:bg-[#111B33] dark:text-white">
+    <h2 className="font-display text-2xl font-black text-slate-900 dark:text-white">
       {title}
     </h2>
-    <p className="mt-2 text-slate-600 dark:text-slate-300">{description}</p>
+    <p className="mt-2 text-slate-500 dark:text-slate-400">{description}</p>
   </div>
 );
 
@@ -87,6 +87,7 @@ export default function StudentDashboard() {
   const [leaveReason, setLeaveReason] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const [department, setDepartment] = useState("cse");
   const [myLeaves, setMyLeaves] = useState<LeaveRequest[]>([]);
 
   const dayStatus = getCurrentDayStatus();
@@ -147,6 +148,7 @@ export default function StudentDashboard() {
       await applyLeave({
         studentName: data.name,
         role: "Student",
+        department,
         reason: leaveReason,
         fromDate,
         toDate,
@@ -156,6 +158,7 @@ export default function StudentDashboard() {
       setLeaveReason("");
       setFromDate("");
       setToDate("");
+      setDepartment("cse");
     } catch {
       alert("Failed to submit leave request");
     }
@@ -179,12 +182,15 @@ export default function StudentDashboard() {
 
   return (
     <MainLayout>
-      <div className="mb-8 rounded-[2rem] border border-slate-200 bg-white/90 p-8 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-gradient-to-r dark:from-blue-600 dark:to-purple-600 dark:text-white">
-        <p className="text-sm font-semibold text-blue-600 dark:text-blue-100">
+      {/* Welcome Banner */}
+      <div className="mb-8 rounded-[2rem] border border-slate-200/60 bg-white/90 p-8 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-gold-600/8 dark:bg-gradient-to-r dark:from-navy dark:via-navy-700 dark:to-navy dark:text-white">
+        <p className="text-sm font-semibold uppercase tracking-wider text-gold-600 dark:text-gold-400 dark:text-gold-300">
           Student Dashboard
         </p>
-        <h1 className="mt-2 text-4xl font-black">Welcome, {data.name}</h1>
-        <p className="mt-2 text-slate-600 dark:text-blue-100">
+        <h1 className="mt-2 font-display text-4xl font-black">
+          Welcome, {data.name}
+        </h1>
+        <p className="mt-2 text-slate-500 dark:text-gold-200/80">
           Today is {dayStatus.dayName}, {dayStatus.fullDate}. Here is your smart
           academic overview.
         </p>
@@ -201,35 +207,39 @@ export default function StudentDashboard() {
             <DayStatusCard />
 
             <div className={cardClass}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Attendance
               </p>
-              <h2 className="mt-2 text-3xl font-black">{data.attendance}%</h2>
+              <h2 className="mt-2 text-3xl font-black text-gold-600 dark:text-gold-400">
+                {data.attendance}%
+              </h2>
             </div>
 
             <div className={cardClass}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Today Classes
               </p>
-              <h2 className="mt-2 text-3xl font-black">
+              <h2 className="mt-2 text-3xl font-black text-slate-900 dark:text-white">
                 {todaySchedule.length}
               </h2>
             </div>
 
             <div className={cardClass}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Exams Today
               </p>
-              <h2 className="mt-2 text-3xl font-black">
+              <h2 className="mt-2 text-3xl font-black text-slate-900 dark:text-white">
                 {dayStatus.isWorkingDay ? examsToday.length : 0}
               </h2>
             </div>
 
             <div className={cardClass}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Leave Requests
               </p>
-              <h2 className="mt-2 text-3xl font-black">{myLeaves.length}</h2>
+              <h2 className="mt-2 text-3xl font-black text-slate-900 dark:text-white">
+                {myLeaves.length}
+              </h2>
             </div>
           </div>
 
@@ -250,8 +260,8 @@ export default function StudentDashboard() {
           />
 
           <div className={cardClass}>
-            <h2 className="mb-4 text-xl font-black text-blue-600 dark:text-blue-300">
-              Today’s Timetable
+            <h2 className="mb-4 text-xl font-black text-gold-600 dark:text-gold-400">
+              Today's Timetable
             </h2>
 
             {todaySchedule.length > 0 ? (
@@ -263,7 +273,7 @@ export default function StudentDashboard() {
                 ))}
               </div>
             ) : (
-              <p className="text-slate-600 dark:text-slate-300">
+              <p className="text-slate-500 dark:text-slate-400">
                 No classes scheduled today because it is a leave day.
               </p>
             )}
@@ -280,10 +290,10 @@ export default function StudentDashboard() {
 
           <div className="grid gap-6 lg:grid-cols-2">
             <div className={cardClass}>
-              <h2 className="mb-3 text-xl font-black text-blue-600 dark:text-blue-300">
+              <h2 className="mb-3 text-xl font-black text-gold-600 dark:text-gold-400">
                 Current Attendance
               </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Your current attendance percentage
               </p>
               <h3 className="mt-4 text-5xl font-black text-slate-900 dark:text-white">
@@ -305,26 +315,59 @@ export default function StudentDashboard() {
 
           <div className="grid gap-6 lg:grid-cols-2">
             <div className={cardClass}>
-              <h2 className="mb-4 text-xl font-black text-purple-600 dark:text-purple-300">
+              <h2 className="mb-4 text-xl font-black text-accent-blue">
                 Apply Leave
               </h2>
 
               <form onSubmit={handleLeaveSubmit}>
+                <select
+                  value={department}
+                  onChange={(e) => setDepartment(e.target.value)}
+                  className={`${inputClass} mb-4`}
+                  required
+                >
+                  <option className="text-black" value="cse">
+                    CSE
+                  </option>
+                  <option className="text-black" value="ece">
+                    ECE
+                  </option>
+                  <option className="text-black" value="eee">
+                    EEE
+                  </option>
+                  <option className="text-black" value="mech">
+                    MECH
+                  </option>
+                </select>
+
                 <div className="mb-4 grid gap-4 md:grid-cols-2">
-                  <input
-                    type="date"
-                    value={fromDate}
-                    onChange={(e) => setFromDate(e.target.value)}
-                    className={inputClass}
-                    required
-                  />
-                  <input
-                    type="date"
-                    value={toDate}
-                    onChange={(e) => setToDate(e.target.value)}
-                    className={inputClass}
-                    required
-                  />
+                  <div>
+                    <label className="mb-2 block text-sm font-semibold text-slate-300">
+                      From
+                    </label>
+
+                    <input
+                      type="date"
+                      value={fromDate}
+                      onChange={(e) => setFromDate(e.target.value)}
+                      className={inputClass}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm font-semibold text-slate-300">
+                      To
+                    </label>
+
+                    <input
+                      type="date"
+                      value={toDate}
+                      onChange={(e) => setToDate(e.target.value)}
+                      className={inputClass}
+                      required
+                    />
+                  </div>
                 </div>
 
                 <textarea
@@ -342,7 +385,7 @@ export default function StudentDashboard() {
             </div>
 
             <div className={cardClass}>
-              <h2 className="mb-4 text-xl font-black text-blue-600 dark:text-blue-300">
+              <h2 className="mb-4 text-xl font-black text-gold-600 dark:text-gold-400">
                 My Leave Requests
               </h2>
 
@@ -350,6 +393,9 @@ export default function StudentDashboard() {
                 <div className="space-y-3">
                   {myLeaves.map((leave) => (
                     <div key={leave.id} className={innerCardClass}>
+                      <p>
+                        <b>Department:</b> {leave.department?.toUpperCase()}
+                      </p>
                       <p>
                         <b>From:</b> {leave.fromDate}
                       </p>
@@ -364,10 +410,10 @@ export default function StudentDashboard() {
                         <span
                           className={
                             leave.status === "Approved"
-                              ? "font-bold text-green-600 dark:text-green-400"
+                              ? "font-bold text-accent-emerald"
                               : leave.status === "Rejected"
-                              ? "font-bold text-red-600 dark:text-red-400"
-                              : "font-bold text-blue-600 dark:text-blue-400"
+                              ? "font-bold text-accent-rose"
+                              : "font-bold text-gold-600 dark:text-gold-400"
                           }
                         >
                           {leave.status}
@@ -377,7 +423,7 @@ export default function StudentDashboard() {
                   ))}
                 </div>
               ) : (
-                <p className="text-slate-600 dark:text-slate-300">
+                <p className="text-slate-500 dark:text-slate-400">
                   No leave requests submitted yet 📭
                 </p>
               )}
@@ -394,7 +440,7 @@ export default function StudentDashboard() {
           />
 
           <div className={cardClass}>
-            <h2 className="mb-4 text-xl font-black text-purple-600 dark:text-purple-300">
+            <h2 className="mb-4 text-xl font-black text-accent-blue">
               Exam Attempts
             </h2>
 
@@ -416,7 +462,7 @@ export default function StudentDashboard() {
                 ))}
               </div>
             ) : (
-              <p className="text-slate-600 dark:text-slate-300">
+              <p className="text-slate-500 dark:text-slate-400">
                 No exams available on leave day.
               </p>
             )}
@@ -441,26 +487,26 @@ export default function StudentDashboard() {
 
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             <div className={cardClass}>
-              <h2 className="mb-2 text-xl font-black text-blue-600 dark:text-blue-300">
+              <h2 className="mb-2 text-xl font-black text-gold-600 dark:text-gold-400">
                 Recent Feedback
               </h2>
-              <p className="text-slate-700 dark:text-slate-200">
+              <p className="text-slate-600 dark:text-slate-300">
                 {data.feedback}
               </p>
             </div>
 
             <div className={cardClass}>
-              <h2 className="mb-2 text-xl font-black text-purple-600 dark:text-purple-300">
+              <h2 className="mb-2 text-xl font-black text-accent-blue">
                 Weak Area
               </h2>
-              <p className="text-slate-700 dark:text-slate-200">
+              <p className="text-slate-600 dark:text-slate-300">
                 {data.weakArea}
               </p>
             </div>
           </div>
 
           <div className={`mt-8 ${cardClass}`}>
-            <h2 className="mb-3 text-xl font-black text-blue-600 dark:text-blue-300">
+            <h2 className="mb-3 text-xl font-black text-gold-600 dark:text-gold-400">
               Leaderboard
             </h2>
             <p>
@@ -476,7 +522,7 @@ export default function StudentDashboard() {
           </div>
 
           <div className={`mt-8 ${cardClass}`}>
-            <h2 className="mb-3 text-xl font-black text-blue-600 dark:text-blue-300">
+            <h2 className="mb-3 text-xl font-black text-gold-600 dark:text-gold-400">
               Adaptive Practice
             </h2>
             <p>

@@ -6,17 +6,21 @@ export default function ProgressCard({
   value: number;
 }) {
   return (
-    <div className="p-6 rounded-2xl bg-white dark:bg-[#111827] border border-gray-200 dark:border-white/10 shadow-md">
-      <h3 className="text-sm text-gray-500 mb-2">{label}</h3>
+    <div className="card-hover rounded-2xl border border-slate-200/60 bg-white p-6 shadow-card dark:border-gold-600/8 dark:bg-[#111B33]">
+      <h3 className="mb-2 text-sm text-slate-500 dark:text-slate-400">
+        {label}
+      </h3>
 
-      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+      <div className="h-3 w-full rounded-full bg-slate-200 dark:bg-slate-700">
         <div
-          className="h-3 rounded-full bg-gradient-to-r from-blue-600 to-purple-600"
+          className="h-3 rounded-full bg-gradient-to-r from-gold-600 to-gold-400 shadow-sm shadow-gold-600/15"
           style={{ width: `${value}%` }}
         />
       </div>
 
-      <p className="mt-2 text-sm font-semibold">{value}%</p>
+      <p className="mt-2 text-sm font-semibold text-slate-900 dark:text-gold-300">
+        {value}%
+      </p>
     </div>
   );
 }

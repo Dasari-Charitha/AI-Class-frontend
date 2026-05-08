@@ -12,10 +12,10 @@ export default function StatCard({ title, value }: Props) {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="bg-white/5 backdrop-blur-xl border border-white/10 p-5 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition duration-300"
+      className="rounded-xl border border-slate-200/60 bg-white/90 p-5 shadow-card backdrop-blur-xl transition duration-300 hover:shadow-gold-600/15Hover dark:border-gold-600/8 dark:bg-[#111B33]"
     >
-      <h3 className="text-gray-300 text-sm">{title}</h3>
-      <p className="text-3xl font-bold text-[#FFD700] mt-2">
+      <h3 className="text-sm text-slate-500 dark:text-slate-400">{title}</h3>
+      <p className="mt-2 text-3xl font-bold text-gold-600 dark:text-gold-400">
         {value}
       </p>
     </motion.div>

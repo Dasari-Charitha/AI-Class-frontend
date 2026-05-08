@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
@@ -39,6 +40,8 @@ const roleTabs = {
 export default function MainLayout({ children }: MainLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const role = location.pathname.includes("teacher")
     ? "teacher"
@@ -63,48 +66,55 @@ export default function MainLayout({ children }: MainLayoutProps) {
   };
 
   const changeTab = (tabId: string) => {
+    setActiveTab(tabId);
+    setMobileMenuOpen(false);
     window.dispatchEvent(
       new CustomEvent(`${role}TabChange`, { detail: tabId })
     );
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-900 transition-colors duration-300 dark:bg-[#020617] dark:text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-[#0a1128] dark:text-white">
       <div className="flex min-h-screen">
-        <aside className="hidden w-72 flex-col justify-between border-r border-slate-200 bg-white/90 p-6 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-white/10 lg:flex">
+        {/* ─── SIDEBAR (Desktop) ─── */}
+        <aside className="hidden w-72 flex-col justify-between border-r border-slate-200/60 bg-white/90 p-6 shadow-card backdrop-blur-xl dark:border-white/5 dark:bg-[#0D1526]/90 lg:flex">
           <div>
+            {/* Logo */}
             <div className="mb-10 flex items-center gap-3">
-              <div className="rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 p-3 text-2xl text-white shadow-lg">
-                🎓
-              </div>
-
+              <img src="/images/mascot-owl.png" alt="AI Classroom" className="h-11 w-11 rounded-xl object-cover" />
               <div>
-                <h1 className="text-xl font-black text-slate-900 dark:text-white">
-                  AI Classroom
+                <h1 className="font-display text-lg font-black">
+                  <span className="text-gold-600 dark:text-gold-400">AI</span>
+                  <span className="text-slate-800 dark:text-white"> Classroom</span>
                 </h1>
-                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                  Intelligence System
-                </p>
+                <p className="text-xs text-slate-400">Intelligence System</p>
               </div>
             </div>
 
-            <nav className="space-y-2">
+            {/* Nav Tabs */}
+            <nav className="space-y-1">
               {roleTabs[role].map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => changeTab(tab.id)}
-                  className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left font-semibold text-slate-700 transition hover:bg-blue-100 hover:text-blue-700 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white"
+                  className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-semibold transition-all duration-200
+                    ${
+                      activeTab === tab.id
+                        ? "bg-gradient-to-r from-gold-50 to-gold-50/30 text-gold-700 shadow-sm dark:from-gold-600/12 dark:to-gold-600/5 dark:text-gold-400"
+                        : "text-slate-600 hover:bg-gold-50/60 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-gold-600/5 dark:hover:text-gold-300"
+                    }`}
                 >
-                  <span>{tab.icon}</span>
+                  <span className="text-lg">{tab.icon}</span>
                   {tab.label}
                 </button>
               ))}
             </nav>
           </div>
 
+          {/* Logout */}
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-2xl bg-red-100 px-4 py-3 font-bold text-red-600 transition hover:bg-red-200 dark:bg-red-500/20 dark:text-red-300 dark:hover:bg-red-500/30"
+            className="flex w-full items-center gap-3 rounded-2xl bg-red-50 px-4 py-3 font-bold text-red-500 transition hover:bg-red-100 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20"
           >
             <span>🚪</span>
             Logout
@@ -112,13 +122,14 @@ export default function MainLayout({ children }: MainLayoutProps) {
         </aside>
 
         <main className="flex-1">
-          <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 px-6 py-4 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-[#020617]/90">
+          {/* ─── HEADER ─── */}
+          <header className="sticky top-0 z-40 border-b border-slate-200/60 bg-white/90 px-6 py-4 shadow-sm backdrop-blur-xl dark:border-white/5 dark:bg-[#0a1128]/90">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">
+                <p className="text-xs font-semibold uppercase tracking-wider text-gold-600 dark:text-gold-500">
                   Dashboard
                 </p>
-                <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+                <h2 className="font-display text-2xl font-black text-slate-900 dark:text-white">
                   {currentRole}
                 </h2>
               </div>
@@ -128,38 +139,61 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
                 <Link
                   to="/roles"
-                  className="hidden rounded-xl border border-slate-300 bg-white px-4 py-2 font-semibold text-slate-800 shadow-sm transition hover:bg-blue-50 dark:border-white/10 dark:bg-white/10 dark:text-white md:block"
+                  className="hidden rounded-xl border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-700 shadow-sm transition hover:border-accent-blue hover:text-accent-blue dark:border-white/10 dark:bg-[#111B33] dark:text-white md:block"
                 >
                   🔄 Switch Roles
                 </Link>
+
+                <button
+                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="rounded-xl border border-slate-200 bg-white p-2 text-slate-700 shadow-sm dark:border-white/10 dark:bg-[#111B33] dark:text-white lg:hidden"
+                >
+                  ☰
+                </button>
               </div>
             </div>
           </header>
 
-          <div className="border-b border-slate-200 bg-white/90 px-4 py-3 dark:border-white/10 dark:bg-white/10 lg:hidden">
+          {/* ─── MOBILE NAV BAR ─── */}
+          <div className="border-b border-slate-200/60 bg-white/90 px-4 py-3 dark:border-white/5 dark:bg-[#0D1526]/80 lg:hidden">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 p-2 text-xl text-white">
-                  🎓
-                </div>
-
+                <img src="/images/mascot-owl.png" alt="" className="h-9 w-9 rounded-xl object-cover" />
                 <div>
-                  <h1 className="text-base font-black text-slate-900 dark:text-white">
-                    AI Classroom
+                  <h1 className="text-base font-black">
+                    <span className="text-gold-600 dark:text-gold-400">AI</span>
+                    <span className="text-slate-800 dark:text-white"> Classroom</span>
                   </h1>
-                  <p className="text-xs text-slate-600 dark:text-slate-300">
-                    Intelligence System
-                  </p>
+                  <p className="text-xs text-slate-400">Intelligence System</p>
                 </div>
               </div>
 
               <button
                 onClick={handleLogout}
-                className="rounded-xl bg-red-100 px-3 py-2 text-sm font-bold text-red-600 dark:bg-red-500/20 dark:text-red-300"
+                className="rounded-xl bg-red-50 px-3 py-2 text-sm font-bold text-red-500 dark:bg-red-500/10 dark:text-red-400"
               >
                 Logout
               </button>
             </div>
+
+            {/* Mobile Tab Pills */}
+            {mobileMenuOpen && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {roleTabs[role].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => changeTab(tab.id)}
+                    className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                      activeTab === tab.id
+                        ? "bg-gradient-to-r from-gold-600 to-gold-400 text-navy-900 shadow-sm"
+                        : "bg-gold-50 text-slate-600 dark:bg-gold-600/8 dark:text-gold-300"
+                    }`}
+                  >
+                    {tab.icon} {tab.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <section className="p-4 text-slate-900 dark:text-white md:p-8">

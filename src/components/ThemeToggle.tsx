@@ -7,10 +7,10 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="h-11 w-11 flex items-center justify-center rounded-full 
-      bg-white/80 text-slate-900 border border-slate-200 shadow-md
-      dark:bg-white/10 dark:text-yellow-300 dark:border-white/10
-      hover:scale-110 transition"
+      className="flex h-11 w-11 items-center justify-center rounded-full 
+      border border-slate-200 bg-white/80 text-slate-600 shadow-sm
+      dark:border-white/10 dark:bg-[#111B33] dark:text-gold-300
+      hover:scale-110 hover:border-gold-500 hover:shadow-gold-600/15 transition"
       title="Toggle theme"
     >
       {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}

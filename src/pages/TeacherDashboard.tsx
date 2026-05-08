@@ -38,13 +38,13 @@ const timetable: Record<string, string[]> = {
 };
 
 const card =
-  "card-hover rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl transition dark:border-white/10 dark:bg-white/10 dark:text-white";
+  "card-hover rounded-3xl border border-slate-200/60 bg-white/90 p-6 text-slate-900 shadow-card backdrop-blur-xl transition dark:border-gold-600/8 dark:bg-[#111B33] dark:text-white";
 
 const inner =
-  "mb-3 rounded-2xl border border-slate-200 bg-slate-100/90 p-4 text-slate-800 dark:border-white/10 dark:bg-black/30 dark:text-slate-100";
+  "card-hover mb-3 rounded-2xl border border-slate-200/40 bg-slate-50 p-4 text-slate-700 dark:border-gold-600/8 dark:bg-[#0D1526] dark:text-white";
 
 const btn =
-  "rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-5 py-2 font-semibold text-white shadow-md transition hover:scale-105 hover:shadow-lg";
+  "rounded-xl bg-gradient-to-r from-gold-600 to-gold-400 px-5 py-2 font-semibold text-slate-900 shadow-md shadow-gold-600/15 transition hover:scale-105 hover:shadow-gold-600/25";
 
 const SectionHeader = ({
   title,
@@ -53,11 +53,11 @@ const SectionHeader = ({
   title: string;
   description: string;
 }) => (
-  <div className="mb-6 rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-white">
-    <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+  <div className="card-hover mb-6 rounded-3xl border border-slate-200/60 bg-white/90 p-6 text-slate-900 shadow-card backdrop-blur-xl dark:border-gold-600/8 dark:bg-[#111B33] dark:text-white">
+    <h2 className="font-display text-2xl font-black text-slate-900 dark:text-white">
       {title}
     </h2>
-    <p className="mt-2 text-slate-600 dark:text-slate-300">{description}</p>
+    <p className="mt-2 text-slate-500 dark:text-slate-400">{description}</p>
   </div>
 );
 
@@ -103,19 +103,20 @@ export default function TeacherDashboard() {
   if (!data) {
     return (
       <MainLayout>
-        <p className="text-slate-700 dark:text-slate-200">Loading...</p>
+        <p className="text-slate-500 dark:text-slate-400">Loading...</p>
       </MainLayout>
     );
   }
 
   return (
     <MainLayout>
-      <div className="mb-8 rounded-[2rem] border border-slate-200 bg-white/90 p-8 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-gradient-to-r dark:from-blue-600 dark:to-purple-600 dark:text-white">
-        <p className="text-sm font-semibold text-blue-600 dark:text-blue-100">
+      {/* Welcome Banner */}
+      <div className="mb-8 rounded-[2rem] border border-slate-200/60 bg-gradient-to-r from-white to-white p-8 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-gold-600/8 dark:from-navy dark:via-navy-700 dark:to-navy dark:text-white">
+        <p className="text-sm font-semibold uppercase tracking-wider text-gold-600 dark:text-gold-400">
           Teacher Dashboard
         </p>
-        <h1 className="mt-2 text-4xl font-black">{data.name}</h1>
-        <p className="mt-2 text-slate-600 dark:text-blue-100">
+        <h1 className="mt-2 font-display text-4xl font-black">{data.name}</h1>
+        <p className="mt-2 text-slate-500 dark:text-slate-400">
           Manage classes, students and academic activities.
         </p>
       </div>
@@ -124,38 +125,38 @@ export default function TeacherDashboard() {
         <>
           <SectionHeader
             title="Teacher Overview"
-            description="Overview of today’s classes, total students, pending leave requests and class performance insights."
+            description="Overview of today's classes, total students, pending leave requests and class performance insights."
           />
 
           <div className="grid gap-6 md:grid-cols-5">
             <DayStatusCard />
 
             <div className={card}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Today Classes
               </p>
-              <h2 className="mt-2 text-3xl font-black">{schedule.length}</h2>
+              <h2 className="mt-2 text-3xl font-black text-slate-900 dark:text-white">{schedule.length}</h2>
             </div>
 
             <div className={card}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Students
               </p>
-              <h2 className="mt-2 text-3xl font-black">{data.students}</h2>
+              <h2 className="mt-2 text-3xl font-black text-slate-900 dark:text-white">{data.students}</h2>
             </div>
 
             <div className={card}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Pending Leaves
               </p>
-              <h2 className="mt-2 text-3xl font-black">{leaves.length}</h2>
+              <h2 className="mt-2 text-3xl font-black text-gold-600 dark:text-gold-400">{leaves.length}</h2>
             </div>
 
             <div className={card}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Avg Score
               </p>
-              <h2 className="mt-2 text-3xl font-black">
+              <h2 className="mt-2 text-3xl font-black text-slate-900 dark:text-white">
                 {data.averageScore}%
               </h2>
             </div>
@@ -174,11 +175,11 @@ export default function TeacherDashboard() {
         <>
           <SectionHeader
             title="Class Schedule"
-            description="Review today’s teaching schedule, planned sessions and classroom responsibilities."
+            description="Review today's teaching schedule, planned sessions and classroom responsibilities."
           />
 
           <div className={card}>
-            <h2 className="mb-4 text-xl font-black text-blue-600 dark:text-blue-300">
+            <h2 className="mb-4 text-xl font-black text-gold-600 dark:text-gold-400">
               Today Schedule
             </h2>
 
@@ -189,7 +190,7 @@ export default function TeacherDashboard() {
                 </div>
               ))
             ) : (
-              <p className="text-slate-600 dark:text-slate-300">
+              <p className="text-slate-500 dark:text-slate-400">
                 No classes today
               </p>
             )}
@@ -205,7 +206,7 @@ export default function TeacherDashboard() {
           />
 
           <div className={card}>
-            <h2 className="mb-4 text-xl font-black text-purple-600 dark:text-purple-300">
+            <h2 className="mb-4 text-xl font-black text-accent-blue">
               Leave Requests
             </h2>
 
@@ -221,13 +222,13 @@ export default function TeacherDashboard() {
                   <div className="mt-3 flex gap-2">
                     <button
                       onClick={() => l.id && update(l.id, "Approved")}
-                      className="rounded-xl bg-green-500 px-4 py-2 font-semibold text-white"
+                      className="rounded-xl bg-accent-emerald px-4 py-2 font-semibold text-navy-900 shadow-sm transition hover:brightness-110"
                     >
                       Approve
                     </button>
                     <button
                       onClick={() => l.id && update(l.id, "Rejected")}
-                      className="rounded-xl bg-red-500 px-4 py-2 font-semibold text-white"
+                      className="rounded-xl bg-accent-rose px-4 py-2 font-semibold text-navy-900 shadow-sm transition hover:brightness-110"
                     >
                       Reject
                     </button>
@@ -235,7 +236,7 @@ export default function TeacherDashboard() {
                 </div>
               ))
             ) : (
-              <p className="text-slate-600 dark:text-slate-300">
+              <p className="text-slate-500 dark:text-slate-400">
                 No pending leaves
               </p>
             )}
@@ -252,20 +253,20 @@ export default function TeacherDashboard() {
 
           <div className="grid gap-6 md:grid-cols-2">
             <div className={card}>
-              <h2 className="mb-3 text-xl font-black text-blue-600 dark:text-blue-300">
+              <h2 className="mb-3 text-xl font-black text-gold-600 dark:text-gold-400">
                 Attendance
               </h2>
-              <p className="mb-4 text-slate-600 dark:text-slate-300">
-                Mark and manage today’s class attendance.
+              <p className="mb-4 text-slate-500 dark:text-slate-400">
+                Mark and manage today's class attendance.
               </p>
               <button className={btn}>Mark Attendance</button>
             </div>
 
             <div className={card}>
-              <h2 className="mb-3 text-xl font-black text-purple-600 dark:text-purple-300">
+              <h2 className="mb-3 text-xl font-black text-accent-blue">
                 Create Exam
               </h2>
-              <p className="mb-4 text-slate-600 dark:text-slate-300">
+              <p className="mb-4 text-slate-500 dark:text-slate-400">
                 Create and schedule tests for your students.
               </p>
               <button className={btn}>Create Exam</button>
@@ -291,7 +292,7 @@ export default function TeacherDashboard() {
 
           <div className="mt-6 grid gap-6 md:grid-cols-2">
             <div className={card}>
-              <h2 className="mb-2 text-xl font-black text-blue-600 dark:text-blue-300">
+              <h2 className="mb-2 text-xl font-black text-gold-600 dark:text-gold-400">
                 At Risk Students
               </h2>
               <p className="text-3xl font-black text-slate-900 dark:text-white">
@@ -300,10 +301,10 @@ export default function TeacherDashboard() {
             </div>
 
             <div className={card}>
-              <h2 className="mb-2 text-xl font-black text-purple-600 dark:text-purple-300">
+              <h2 className="mb-2 text-xl font-black text-accent-blue">
                 Upcoming Exam
               </h2>
-              <p className="text-lg font-medium text-slate-700 dark:text-slate-200">
+              <p className="text-lg font-medium text-slate-600 dark:text-slate-300">
                 {data.upcomingExam}
               </p>
             </div>

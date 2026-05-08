@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { GraduationCap, Users, BookOpen, BarChart3 } from "lucide-react";
@@ -8,9 +9,15 @@ type Role = "student" | "teacher" | "hod" | "principal";
 export default function RoleSelection() {
   const navigate = useNavigate();
   const { setRole, user } = useAuth();
+  const [hodBranch, setHodBranch] = useState("cse");
 
   const handleSelect = (role: Role) => {
     setRole(role);
+
+    if (role === "hod") {
+      localStorage.setItem("hodBranch", hodBranch);
+    }
+
     navigate(`/${role}`);
   };
 
@@ -83,7 +90,22 @@ export default function RoleSelection() {
                 {role.icon}
                 <h2 className="text-2xl font-semibold">{role.title}</h2>
               </div>
+
               <p className="text-gray-300">{role.desc}</p>
+
+              {role.key === "hod" && (
+                <select
+                  value={hodBranch}
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={(e) => setHodBranch(e.target.value)}
+                  className="mt-4 w-full rounded-xl border border-white/10 bg-black/30 p-3 text-white outline-none focus:border-yellow-400"
+                >
+                  <option className="text-black" value="cse">CSE HOD</option>
+                  <option className="text-black" value="ece">ECE HOD</option>
+                  <option className="text-black" value="eee">EEE HOD</option>
+                  <option className="text-black" value="mech">MECH HOD</option>
+                </select>
+              )}
             </motion.button>
           ))}
         </div>

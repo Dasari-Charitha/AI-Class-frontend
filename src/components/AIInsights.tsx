@@ -1,5 +1,6 @@
 type AIInsightsProps = {
   role: "student" | "teacher" | "principal" | "hod";
+  department?: string;
 };
 
 const insights: Record<string, string[]> = {
@@ -25,18 +26,46 @@ const insights: Record<string, string[]> = {
   ],
 };
 
-export default function AIInsights({ role }: AIInsightsProps) {
+const hodInsights: Record<string, string[]> = {
+  cse: [
+    "💻 CSE attendance is improving this week.",
+    "⚠️ Review students struggling in programming subjects.",
+    "🎯 Focus on AI Lab and Data Structures performance.",
+  ],
+  ece: [
+    "📡 ECE lab performance needs monitoring.",
+    "⚠️ Digital Systems reports are pending.",
+    "🎯 Focus on VLSI and communication subjects.",
+  ],
+  eee: [
+    "⚡ EEE attendance needs attention.",
+    "⚠️ Power Systems performance is slightly low.",
+    "🎯 Focus on machines lab and circuit analysis.",
+  ],
+  mech: [
+    "⚙️ MECH workshop performance is improving.",
+    "⚠️ CAD lab attendance needs review.",
+    "🎯 Focus on thermal engineering performance.",
+  ],
+};
+
+export default function AIInsights({ role, department }: AIInsightsProps) {
+  const selectedInsights =
+    role === "hod" && department
+      ? hodInsights[department] || insights.hod
+      : insights[role];
+
   return (
-    <div className="card-hover mt-8 rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-white">
-      <h2 className="mb-4 text-xl font-black text-blue-600 dark:text-blue-300">
+    <div className="card-hover mt-8 rounded-3xl border border-slate-200/60 bg-white/90 p-6 text-slate-900 shadow-card backdrop-blur-xl dark:border-gold-600/8 dark:bg-[#111B33] dark:text-white">
+      <h2 className="mb-4 text-xl font-black text-gold-600 dark:text-gold-400">
         AI Insights
       </h2>
 
       <ul className="space-y-3">
-        {insights[role].map((item, index) => (
+        {selectedInsights.map((item, index) => (
           <li
             key={index}
-            className="rounded-2xl border border-slate-200 bg-slate-100/90 p-4 text-slate-800 dark:border-white/10 dark:bg-black/30 dark:text-slate-100"
+            className="card-hover rounded-2xl border border-slate-200/40 bg-slate-50 p-4 text-slate-700 dark:border-gold-600/8 dark:bg-[#0D1526] dark:text-white"
           >
             {item}
           </li>

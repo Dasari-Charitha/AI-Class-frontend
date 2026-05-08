@@ -4,6 +4,7 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import type { User } from "firebase/auth";
 
@@ -17,6 +18,7 @@ interface AuthContextType {
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
   setRole: (role: Role) => void;
+  resetPassword: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -63,9 +65,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.setItem("role", role);
   };
 
+  const resetPassword = async (email: string) => {
+    await sendPasswordResetEmail(auth, email);
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, role, loginWithGoogle, logout, setRole }}
+      value={{ user, role, loginWithGoogle, logout, setRole, resetPassword }}
     >
       {children}
     </AuthContext.Provider>

@@ -26,20 +26,20 @@ export default function DayStatusCard() {
   const dayStatus = getCurrentDayStatus();
 
   return (
-    <div className="card-hover rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-white">
-      <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">
+    <div className="card-hover rounded-3xl border border-slate-200/60 bg-white/90 p-6 text-slate-900 shadow-card backdrop-blur-xl dark:border-gold-600/8 dark:bg-[#111B33] dark:text-white">
+      <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">
         Today
       </p>
 
-      <h2 className="mt-2 text-2xl font-black text-slate-900 dark:text-white">
+      <h2 className="mt-2 font-display text-2xl font-black text-slate-900 dark:text-white">
         {dayStatus.dayName}
       </h2>
 
-      <p className="mt-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+      <p className="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">
         📅 {dayStatus.fullDate}
       </p>
 
-      <div className="mt-4 rounded-2xl bg-blue-100 px-4 py-3 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300">
+      <div className="mt-4 rounded-2xl bg-gold-50 px-4 py-3 text-gold-700 dark:bg-gold-600/10 dark:text-gold-300">
         <p className="font-black">{dayStatus.status}</p>
         <p className="text-sm">{dayStatus.message}</p>
       </div>

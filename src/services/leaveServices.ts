@@ -13,6 +13,7 @@ export type LeaveRequest = {
   id?: string;
   studentName: string;
   role: "Student" | "Teacher" | "Staff";
+  department?: string;
   reason: string;
   fromDate: string;
   toDate: string;

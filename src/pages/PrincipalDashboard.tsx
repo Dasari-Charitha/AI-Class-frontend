@@ -31,10 +31,10 @@ const smartAlerts = [
 ];
 
 const card =
-  "card-hover rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl transition dark:border-white/10 dark:bg-white/10 dark:text-white";
+  "card-hover rounded-3xl border border-slate-200/60 bg-white/90 p-6 text-slate-900 shadow-card backdrop-blur-xl transition dark:border-gold-600/8 dark:bg-[#111B33] dark:text-white";
 
 const inner =
-  "rounded-2xl border border-slate-200 bg-slate-100/90 p-4 text-slate-800 dark:border-white/10 dark:bg-black/30 dark:text-slate-100";
+  "card-hover rounded-2xl border border-slate-200/40 bg-slate-50 p-4 text-slate-700 dark:border-gold-600/8 dark:bg-[#0D1526] dark:text-white";
 
 const SectionHeader = ({
   title,
@@ -43,11 +43,11 @@ const SectionHeader = ({
   title: string;
   description: string;
 }) => (
-  <div className="mb-6 rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-white">
-    <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+  <div className="card-hover mb-6 rounded-3xl border border-slate-200/60 bg-white/90 p-6 text-slate-900 shadow-card backdrop-blur-xl dark:border-gold-600/8 dark:bg-[#111B33] dark:text-white">
+    <h2 className="font-display text-2xl font-black text-slate-900 dark:text-white">
       {title}
     </h2>
-    <p className="mt-2 text-slate-600 dark:text-slate-300">{description}</p>
+    <p className="mt-2 text-slate-500 dark:text-slate-400">{description}</p>
   </div>
 );
 
@@ -90,7 +90,7 @@ export default function PrincipalDashboard() {
   if (!data) {
     return (
       <MainLayout>
-        <p className="text-slate-700 dark:text-slate-200">Loading...</p>
+        <p className="text-slate-500 dark:text-slate-400">Loading...</p>
       </MainLayout>
     );
   }
@@ -108,12 +108,13 @@ export default function PrincipalDashboard() {
 
   return (
     <MainLayout>
-      <div className="mb-8 rounded-[2rem] border border-slate-200 bg-white/90 p-8 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-gradient-to-r dark:from-blue-600 dark:to-purple-600 dark:text-white">
-        <p className="text-sm font-semibold text-blue-600 dark:text-blue-100">
+      {/* Welcome Banner */}
+      <div className="mb-8 rounded-[2rem] border border-slate-200/60 bg-gradient-to-r from-white to-white p-8 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-gold-600/8 dark:from-navy dark:via-navy-700 dark:to-navy dark:text-white">
+        <p className="text-sm font-semibold uppercase tracking-wider text-gold-600 dark:text-gold-400">
           Principal Dashboard
         </p>
-        <h1 className="mt-2 text-4xl font-black">{data.name}</h1>
-        <p className="mt-2 text-slate-600 dark:text-blue-100">
+        <h1 className="mt-2 font-display text-4xl font-black">{data.name}</h1>
+        <p className="mt-2 text-slate-500 dark:text-slate-400">
           Institution-wide analytics, academic health monitoring, leave overview
           and smart alerts.
         </p>
@@ -130,33 +131,33 @@ export default function PrincipalDashboard() {
             <DayStatusCard />
 
             <div className={card}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Total Students
               </p>
-              <h2 className="mt-2 text-3xl font-black">
+              <h2 className="mt-2 text-3xl font-black text-slate-900 dark:text-white">
                 {data.totalStudents}
               </h2>
             </div>
 
             <div className={card}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Faculty
               </p>
-              <h2 className="mt-2 text-3xl font-black">{data.faculty}</h2>
+              <h2 className="mt-2 text-3xl font-black text-slate-900 dark:text-white">{data.faculty}</h2>
             </div>
 
             <div className={card}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Departments
               </p>
-              <h2 className="mt-2 text-3xl font-black">{data.departments}</h2>
+              <h2 className="mt-2 text-3xl font-black text-slate-900 dark:text-white">{data.departments}</h2>
             </div>
 
             <div className={card}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Performance
               </p>
-              <h2 className="mt-2 text-3xl font-black">
+              <h2 className="mt-2 text-3xl font-black text-gold-600 dark:text-gold-400">
                 {data.institutionPerformance}%
               </h2>
             </div>
@@ -182,7 +183,7 @@ export default function PrincipalDashboard() {
           />
 
           <div className={card}>
-            <h2 className="mb-4 text-xl font-black text-blue-600 dark:text-blue-300">
+            <h2 className="mb-4 text-xl font-black text-gold-600 dark:text-gold-400">
               Leave Statistics
             </h2>
 
@@ -191,14 +192,14 @@ export default function PrincipalDashboard() {
                 <p className="text-sm text-slate-500 dark:text-slate-400">
                   Total Leaves
                 </p>
-                <h3 className="text-3xl font-black">{totalLeaves}</h3>
+                <h3 className="text-3xl font-black text-slate-900 dark:text-white">{totalLeaves}</h3>
               </div>
 
               <div className={inner}>
                 <p className="text-sm text-slate-500 dark:text-slate-400">
                   Pending
                 </p>
-                <h3 className="text-3xl font-black text-blue-600 dark:text-blue-400">
+                <h3 className="text-3xl font-black text-gold-600 dark:text-gold-400">
                   {pendingLeaves}
                 </h3>
               </div>
@@ -207,7 +208,7 @@ export default function PrincipalDashboard() {
                 <p className="text-sm text-slate-500 dark:text-slate-400">
                   Approved
                 </p>
-                <h3 className="text-3xl font-black text-green-600 dark:text-green-400">
+                <h3 className="text-3xl font-black text-emerald-500">
                   {approvedLeaves}
                 </h3>
               </div>
@@ -216,7 +217,7 @@ export default function PrincipalDashboard() {
                 <p className="text-sm text-slate-500 dark:text-slate-400">
                   Rejected
                 </p>
-                <h3 className="text-3xl font-black text-red-600 dark:text-red-400">
+                <h3 className="text-3xl font-black text-red-500 dark:text-red-400">
                   {rejectedLeaves}
                 </h3>
               </div>
@@ -233,13 +234,13 @@ export default function PrincipalDashboard() {
           />
 
           <div className={card}>
-            <h2 className="mb-4 text-xl font-black text-purple-600 dark:text-purple-300">
+            <h2 className="mb-4 text-xl font-black text-accent-blue">
               Active Alerts
             </h2>
 
             <div className="space-y-3">
               {smartAlerts.map((alert, index) => (
-                <div key={index} className={inner}>
+                <div key={index} className={`${inner} border-l-4 border-l-gold-500`}>
                   {alert}
                 </div>
               ))}
@@ -265,24 +266,24 @@ export default function PrincipalDashboard() {
 
           <div className="mt-6 grid gap-6 md:grid-cols-3">
             <div className={card}>
-              <h2 className="mb-2 text-xl font-black text-blue-600 dark:text-blue-300">
+              <h2 className="mb-2 text-xl font-black text-gold-600 dark:text-gold-400">
                 Institutional Health Index
               </h2>
-              <p className="text-3xl font-black">{data.healthIndex}/100</p>
+              <p className="text-3xl font-black text-slate-900 dark:text-white">{data.healthIndex}/100</p>
             </div>
 
             <div className={card}>
-              <h2 className="mb-2 text-xl font-black text-red-600 dark:text-red-300">
+              <h2 className="mb-2 text-xl font-black text-red-500 dark:text-red-400">
                 Critical Alerts
               </h2>
-              <p className="text-3xl font-black">{data.criticalAlerts}</p>
+              <p className="text-3xl font-black text-slate-900 dark:text-white">{data.criticalAlerts}</p>
             </div>
 
             <div className={card}>
-              <h2 className="mb-2 text-xl font-black text-purple-600 dark:text-purple-300">
+              <h2 className="mb-2 text-xl font-black text-accent-blue">
                 Top Department
               </h2>
-              <p className="text-3xl font-black">{data.topDepartment}</p>
+              <p className="text-3xl font-black text-gold-600 dark:text-gold-400">{data.topDepartment}</p>
             </div>
           </div>
         </>

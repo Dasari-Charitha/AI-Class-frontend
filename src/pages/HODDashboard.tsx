@@ -27,20 +27,33 @@ type HODData = {
 
 type TabType = "dashboard" | "leaves" | "timetable" | "performance";
 
-const departmentSchedule = [
-  "CSE - AI Lab - 9:00 AM",
-  "ECE - Digital Systems - 11:00 AM",
-  "IT - Web Development - 2:00 PM",
-];
+const departmentSchedule: Record<string, string[]> = {
+  cse: [
+    "CSE - AI Lab - 9:00 AM",
+    "CSE - Data Structures - 11:00 AM",
+  ],
+  ece: [
+    "ECE - Digital Systems - 11:00 AM",
+    "ECE - VLSI Lab - 2:00 PM",
+  ],
+  eee: [
+    "EEE - Power Systems - 10:00 AM",
+    "EEE - Machines Lab - 1:00 PM",
+  ],
+  mech: [
+    "MECH - CAD Lab - 9:30 AM",
+    "MECH - Thermal Engineering - 12:00 PM",
+  ],
+};
 
 const card =
-  "card-hover rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl transition dark:border-white/10 dark:bg-white/10 dark:text-white";
+  "card-hover rounded-3xl border border-slate-200/60 bg-white/90 p-6 text-slate-900 shadow-card backdrop-blur-xl transition dark:border-gold-600/8 dark:bg-[#111B33] dark:text-white";
 
 const inner =
-  "rounded-2xl border border-slate-200 bg-slate-100/90 p-4 text-slate-800 dark:border-white/10 dark:bg-black/30 dark:text-slate-100";
+  "card-hover rounded-2xl border border-slate-200/40 bg-slate-50 p-4 text-slate-700 dark:border-gold-600/8 dark:bg-[#0D1526] dark:text-white";
 
 const btn =
-  "rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-5 py-2 font-semibold text-white shadow-md transition hover:scale-105 hover:shadow-lg";
+  "rounded-xl bg-gradient-to-r from-gold-600 to-gold-400 px-5 py-2 font-semibold text-slate-900 shadow-md shadow-gold-600/15 transition hover:scale-105 hover:shadow-gold-600/25";
 
 const SectionHeader = ({
   title,
@@ -49,11 +62,11 @@ const SectionHeader = ({
   title: string;
   description: string;
 }) => (
-  <div className="mb-6 rounded-3xl border border-slate-200 bg-white/90 p-6 text-slate-900 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:text-white">
-    <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+  <div className="card-hover mb-6 rounded-3xl border border-slate-200/60 bg-white/90 p-6 text-slate-900 shadow-card backdrop-blur-xl dark:border-gold-600/8 dark:bg-[#111B33] dark:text-white">
+    <h2 className="font-display text-2xl font-black text-slate-900 dark:text-white">
       {title}
     </h2>
-    <p className="mt-2 text-slate-600 dark:text-slate-300">{description}</p>
+    <p className="mt-2 text-slate-500 dark:text-slate-400">{description}</p>
   </div>
 );
 
@@ -62,23 +75,36 @@ export default function HODDashboard() {
   const [data, setData] = useState<HODData | null>(null);
   const [leaves, setLeaves] = useState<LeaveRequest[]>([]);
 
+  const selectedBranch = localStorage.getItem("hodBranch") || "cse";
+  const schedule = departmentSchedule[selectedBranch] || [];
+
   useEffect(() => {
     const fetchData = async () => {
-      const snap = await getDoc(doc(db, "dashboards", "hod"));
+      const snap = await getDoc(
+        doc(db, "dashboards", `hod_${selectedBranch}`)
+      );
 
       if (snap.exists()) {
         setData(snap.data() as HODData);
+      } else {
+        console.log("No dashboard found for:", `hod_${selectedBranch}`);
       }
     };
 
     fetchData();
 
     const unsubscribe = listenLeaveRequests((items) => {
-      setLeaves(items.filter((leave) => leave.status === "Pending"));
+      setLeaves(
+        items.filter(
+          (leave) =>
+            leave.status === "Pending" &&
+            leave.department?.toLowerCase() === selectedBranch
+        )
+      );
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [selectedBranch]);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -104,28 +130,28 @@ export default function HODDashboard() {
   if (!data) {
     return (
       <MainLayout>
-        <p className="text-slate-700 dark:text-slate-200">Loading...</p>
+        <p className="text-slate-500 dark:text-slate-400">Loading...</p>
       </MainLayout>
     );
   }
 
   return (
     <MainLayout>
-      <div className="mb-8 rounded-[2rem] border border-slate-200 bg-white/90 p-8 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-gradient-to-r dark:from-blue-600 dark:to-purple-600 dark:text-white">
-        <p className="text-sm font-semibold text-blue-600 dark:text-blue-100">
-          HOD Dashboard
+      <div className="mb-8 rounded-[2rem] border border-slate-200/60 bg-gradient-to-r from-white to-white p-8 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-gold-600/8 dark:from-navy dark:via-navy-700 dark:to-navy dark:text-white">
+        <p className="text-sm font-semibold uppercase tracking-wider text-gold-600 dark:text-gold-400">
+          {selectedBranch.toUpperCase()} HOD Dashboard
         </p>
-        <h1 className="mt-2 text-4xl font-black">{data.name}</h1>
-        <p className="mt-2 text-slate-600 dark:text-blue-100">
-          Monitor department performance, leave requests, faculty activity and
-          academic progress.
+        <h1 className="mt-2 font-display text-4xl font-black">{data.name}</h1>
+        <p className="mt-2 text-slate-500 dark:text-slate-400">
+          Monitor {selectedBranch.toUpperCase()} department performance, leave
+          requests, faculty activity and academic progress.
         </p>
       </div>
 
       {activeTab === "dashboard" && (
         <>
           <SectionHeader
-            title="HOD Overview"
+            title={`${selectedBranch.toUpperCase()} HOD Overview`}
             description="Monitor department-level academics, faculty activity, reports and attendance performance."
           />
 
@@ -133,31 +159,37 @@ export default function HODDashboard() {
             <DayStatusCard />
 
             <div className={card}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Departments
               </p>
-              <h2 className="mt-2 text-3xl font-black">{data.departments}</h2>
+              <h2 className="mt-2 text-3xl font-black text-slate-900 dark:text-white">
+                {data.departments}
+              </h2>
             </div>
 
             <div className={card}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Faculty
               </p>
-              <h2 className="mt-2 text-3xl font-black">{data.faculty}</h2>
+              <h2 className="mt-2 text-3xl font-black text-slate-900 dark:text-white">
+                {data.faculty}
+              </h2>
             </div>
 
             <div className={card}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Reports
               </p>
-              <h2 className="mt-2 text-3xl font-black">{data.reports}</h2>
+              <h2 className="mt-2 text-3xl font-black text-gold-600 dark:text-gold-400">
+                {data.reports}
+              </h2>
             </div>
 
             <div className={card}>
-              <p className="text-sm text-slate-600 dark:text-slate-300">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Avg Score
               </p>
-              <h2 className="mt-2 text-3xl font-black">
+              <h2 className="mt-2 text-3xl font-black text-slate-900 dark:text-white">
                 {data.averageScore}%
               </h2>
             </div>
@@ -165,25 +197,25 @@ export default function HODDashboard() {
 
           <div className="mt-6 grid gap-6 md:grid-cols-2">
             <ProgressCard
-              label="Department Attendance Rate"
+              label={`${selectedBranch.toUpperCase()} Attendance Rate`}
               value={data.attendanceRate}
             />
-            <Notifications />
+            <Notifications department={selectedBranch} />
           </div>
 
-          <AIInsights role="hod" />
+          <AIInsights role="hod" department={selectedBranch} />
         </>
       )}
 
       {activeTab === "leaves" && (
         <>
           <SectionHeader
-            title="Leave Monitoring"
-            description="Review pending leave requests and take approval or rejection actions."
+            title={`${selectedBranch.toUpperCase()} Leave Monitoring`}
+            description="Review pending leave requests for this department and take approval or rejection actions."
           />
 
           <div className={card}>
-            <h2 className="mb-4 text-xl font-black text-blue-600 dark:text-blue-300">
+            <h2 className="mb-4 text-xl font-black text-gold-600 dark:text-gold-400">
               Pending Leave Requests
             </h2>
 
@@ -207,14 +239,14 @@ export default function HODDashboard() {
                     <div className="mt-3 flex gap-3">
                       <button
                         onClick={() => leave.id && update(leave.id, "Approved")}
-                        className="rounded-xl bg-green-500 px-4 py-2 font-semibold text-white"
+                        className="rounded-xl bg-accent-emerald px-4 py-2 font-semibold text-navy-900 shadow-sm transition hover:brightness-110"
                       >
                         Approve
                       </button>
 
                       <button
                         onClick={() => leave.id && update(leave.id, "Rejected")}
-                        className="rounded-xl bg-red-500 px-4 py-2 font-semibold text-white"
+                        className="rounded-xl bg-accent-rose px-4 py-2 font-semibold text-navy-900 shadow-sm transition hover:brightness-110"
                       >
                         Reject
                       </button>
@@ -223,8 +255,8 @@ export default function HODDashboard() {
                 ))}
               </div>
             ) : (
-              <p className="text-slate-600 dark:text-slate-300">
-                No pending leave requests 📭
+              <p className="text-slate-500 dark:text-slate-400">
+                No pending leave requests for {selectedBranch.toUpperCase()} 📭
               </p>
             )}
           </div>
@@ -234,17 +266,17 @@ export default function HODDashboard() {
       {activeTab === "timetable" && (
         <>
           <SectionHeader
-            title="Department Timetable"
+            title={`${selectedBranch.toUpperCase()} Department Timetable`}
             description="View department schedules, labs, sessions and planned academic activities."
           />
 
           <div className={card}>
-            <h2 className="mb-4 text-xl font-black text-purple-600 dark:text-purple-300">
+            <h2 className="mb-4 text-xl font-black text-accent-blue">
               Department Timetable Overview
             </h2>
 
             <div className="space-y-3">
-              {departmentSchedule.map((item, index) => (
+              {schedule.map((item, index) => (
                 <div key={index} className={inner}>
                   {item}
                 </div>
@@ -259,28 +291,30 @@ export default function HODDashboard() {
       {activeTab === "performance" && (
         <>
           <SectionHeader
-            title="Department Performance"
+            title={`${selectedBranch.toUpperCase()} Department Performance`}
             description="Analyze department performance, attendance rate, risk indicators and top-performing areas."
           />
 
           <div className={card}>
             <Charts
-              title1="Department Performance"
-              title2="Department Comparison"
+              title1={`${selectedBranch.toUpperCase()} Performance`}
+              title2="Department Trend"
               data={data.chartData}
             />
           </div>
 
           <div className="mt-6 grid gap-6 md:grid-cols-3">
             <div className={card}>
-              <h2 className="mb-2 text-xl font-black text-blue-600 dark:text-blue-300">
+              <h2 className="mb-2 text-xl font-black text-gold-600 dark:text-gold-400">
                 Attendance Rate
               </h2>
-              <p className="text-3xl font-black">{data.attendanceRate}%</p>
+              <p className="text-3xl font-black text-slate-900 dark:text-white">
+                {data.attendanceRate}%
+              </p>
             </div>
 
             <div className={card}>
-              <h2 className="mb-2 text-xl font-black text-purple-600 dark:text-purple-300">
+              <h2 className="mb-2 text-xl font-black text-red-500 dark:text-red-400">
                 Students At Risk
               </h2>
               <p className="text-3xl font-black text-slate-900 dark:text-white">
@@ -289,10 +323,12 @@ export default function HODDashboard() {
             </div>
 
             <div className={card}>
-              <h2 className="mb-2 text-xl font-black text-purple-600 dark:text-purple-300">
+              <h2 className="mb-2 text-xl font-black text-accent-blue">
                 Best Department
               </h2>
-              <p className="text-3xl font-black">{data.bestDepartment}</p>
+              <p className="text-3xl font-black text-gold-600 dark:text-gold-400">
+                {data.bestDepartment}
+              </p>
             </div>
           </div>
         </>
