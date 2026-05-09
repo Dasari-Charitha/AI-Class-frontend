@@ -26,7 +26,13 @@ type TeacherData = {
   chartData: { name: string; value: number }[];
 };
 
-type TabType = "dashboard" | "classes" | "leaves" | "actions" | "performance";
+type TabType =
+  | "dashboard"
+  | "classes"
+  | "leaves"
+  | "attendance"
+  | "exams"
+  | "performance";
 
 const timetable: Record<string, string[]> = {
   Monday: ["Class 10-A Maths", "Class 9-B AI Basics"],
@@ -111,13 +117,13 @@ export default function TeacherDashboard() {
   return (
     <MainLayout>
       {/* Welcome Banner */}
-      <div className="mb-8 rounded-[2rem] border border-slate-200/60 bg-gradient-to-r from-white to-white p-8 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-gold-600/8 dark:from-navy dark:via-navy-700 dark:to-navy dark:text-white">
-        <p className="text-sm font-semibold uppercase tracking-wider text-gold-600 dark:text-gold-400">
+      <div className="mb-8 border-b border-white/10 pb-6">
+        <h1 className="text-4xl font-black text-slate-900 dark:text-white">
           Teacher Dashboard
-        </p>
-        <h1 className="mt-2 font-display text-4xl font-black">{data.name}</h1>
-        <p className="mt-2 text-slate-500 dark:text-slate-400">
-          Manage classes, students and academic activities.
+        </h1>
+ 
+        <p className="mt-2 text-lg text-slate-600 dark:text-slate-400">
+          Welcome back, {data.name} 👋
         </p>
       </div>
 
@@ -244,33 +250,116 @@ export default function TeacherDashboard() {
         </>
       )}
 
-      {activeTab === "actions" && (
+      {activeTab === "attendance" && (
         <>
           <SectionHeader
-            title="Quick Actions"
-            description="Mark attendance, create exams and manage important classroom activities from one place."
+            title="Attendance Management"
+            description="Mark and manage student attendance for today's classes."
           />
 
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className={card}>
-              <h2 className="mb-3 text-xl font-black text-gold-600 dark:text-gold-400">
-                Attendance
-              </h2>
-              <p className="mb-4 text-slate-500 dark:text-slate-400">
-                Mark and manage today's class attendance.
-              </p>
-              <button className={btn}>Mark Attendance</button>
+          <div className={card}>
+            <h2 className="mb-3 text-xl font-black text-gold-600 dark:text-gold-400">
+              Mark Attendance
+            </h2>
+
+            <p className="mb-4 text-slate-500 dark:text-slate-400">
+              Select a class and mark students as present or absent.
+            </p>
+
+            <div className="mb-4 grid gap-4 md:grid-cols-2">
+              <select className="rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-gold-600/15 dark:bg-[#0D1526] dark:text-white">
+                <option>Class 10-A Maths</option>
+                <option>Class 9-B AI Basics</option>
+                <option>Class 8-A Computer Science</option>
+              </select>
+
+              <input
+                type="date"
+                className="rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-gold-600/15 dark:bg-[#0D1526] dark:text-white"
+              />
             </div>
 
-            <div className={card}>
-              <h2 className="mb-3 text-xl font-black text-accent-blue">
-                Create Exam
-              </h2>
-              <p className="mb-4 text-slate-500 dark:text-slate-400">
-                Create and schedule tests for your students.
-              </p>
-              <button className={btn}>Create Exam</button>
+            <div className="space-y-3">
+              {["Aarav", "Meera", "Charan", "Diya", "Rahul"].map((student) => (
+                <div
+                  key={student}
+                  className="flex items-center justify-between rounded-2xl border border-slate-200/50 bg-slate-50 p-4 dark:border-gold-600/8 dark:bg-[#0D1526]"
+                >
+                  <p className="font-semibold">{student}</p>
+
+                  <div className="flex gap-2">
+                    <button className="rounded-xl bg-accent-emerald px-4 py-2 text-sm font-bold text-navy-900">
+                      Present
+                    </button>
+                    <button className="rounded-xl bg-accent-rose px-4 py-2 text-sm font-bold text-navy-900">
+                      Absent
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
+
+            <button className={`${btn} mt-5`}>Submit Attendance</button>
+          </div>
+        </>
+      )}
+
+      {activeTab === "exams" && (
+        <>
+          <SectionHeader
+            title="Create Exam"
+            description="Create and schedule exams, tests and assessments for students."
+          />
+
+          <div className={card}>
+            <h2 className="mb-4 text-xl font-black text-accent-blue">
+              Exam Details
+            </h2>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <input
+                type="text"
+                placeholder="Exam Title"
+                className="rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-gold-600/15 dark:bg-[#0D1526] dark:text-white"
+              />
+
+              <select className="rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-gold-600/15 dark:bg-[#0D1526] dark:text-white">
+                <option>Class 10-A Maths</option>
+                <option>Class 9-B AI Basics</option>
+                <option>Class 8-A Computer Science</option>
+              </select>
+
+              <input
+                type="date"
+                className="rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-gold-600/15 dark:bg-[#0D1526] dark:text-white"
+              />
+
+              <input
+                type="time"
+                placeholder="Select Time"
+                className="rounded-xl border border-slate-300 bg-white p-3 text-slate-900 [color-scheme:dark] outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-gold-600/15 dark:bg-[#0D1526] dark:text-white"
+              />
+
+              <input
+                type="number"
+                placeholder="Total Marks"
+                className="rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none appearance-auto focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-gold-600/15 dark:bg-[#0D1526] dark:text-white"
+              />
+
+              <input
+                type="number"
+                placeholder="Duration in minutes"
+                className="rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none appearance-auto focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-gold-600/15 dark:bg-[#0D1526] dark:text-white"
+              />
+            </div>
+
+            <textarea
+              placeholder="Exam instructions"
+              rows={4}
+              className="mt-4 w-full rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-gold-600/15 dark:bg-[#0D1526] dark:text-white"
+            />
+
+            <button className={`${btn} mt-5`}>Create Exam</button>
           </div>
         </>
       )}

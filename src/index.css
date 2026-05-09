@@ -285,3 +285,8 @@ form:hover {
   25% { transform: translateY(-10px) rotate(1deg); }
   75% { transform: translateY(5px) rotate(-1deg); }
 }
+
+.number-input::-webkit-inner-spin-button,
+.number-input::-webkit-outer-spin-button {
+  opacity: 1;
+}

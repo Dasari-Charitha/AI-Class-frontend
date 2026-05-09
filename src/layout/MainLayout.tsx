@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 
 type MainLayoutProps = {
@@ -20,7 +20,8 @@ const roleTabs = {
     { id: "dashboard", label: "Dashboard", icon: "📊" },
     { id: "classes", label: "Classes", icon: "📚" },
     { id: "leaves", label: "Leave Requests", icon: "📝" },
-    { id: "actions", label: "Actions", icon: "⚙️" },
+    { id: "attendance", label: "Attendance", icon: "✅" },
+    { id: "exams", label: "Create Exam", icon: "🧪" },
     { id: "performance", label: "Performance", icon: "📈" },
   ],
   hod: [
@@ -50,15 +51,6 @@ export default function MainLayout({ children }: MainLayoutProps) {
     : location.pathname.includes("hod")
     ? "hod"
     : "student";
-
-  const currentRole =
-    role === "teacher"
-      ? "Teacher Dashboard"
-      : role === "principal"
-      ? "Principal Dashboard"
-      : role === "hod"
-      ? "HOD Dashboard"
-      : "Student Dashboard";
 
   const handleLogout = () => {
     localStorage.removeItem("role");
@@ -122,37 +114,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         </aside>
 
         <main className="flex-1">
-          {/* ─── HEADER ─── */}
-          <header className="sticky top-0 z-40 border-b border-slate-200/60 bg-white/90 px-6 py-4 shadow-sm backdrop-blur-xl dark:border-white/5 dark:bg-[#0a1128]/90">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-gold-600 dark:text-gold-500">
-                  Dashboard
-                </p>
-                <h2 className="font-display text-2xl font-black text-slate-900 dark:text-white">
-                  {currentRole}
-                </h2>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <ThemeToggle />
-
-                <Link
-                  to="/roles"
-                  className="hidden rounded-xl border border-slate-200 bg-white px-4 py-2 font-semibold text-slate-700 shadow-sm transition hover:border-accent-blue hover:text-accent-blue dark:border-white/10 dark:bg-[#111B33] dark:text-white md:block"
-                >
-                  🔄 Switch Roles
-                </Link>
-
-                <button
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="rounded-xl border border-slate-200 bg-white p-2 text-slate-700 shadow-sm dark:border-white/10 dark:bg-[#111B33] dark:text-white lg:hidden"
-                >
-                  ☰
-                </button>
-              </div>
-            </div>
-          </header>
+          
 
           {/* ─── MOBILE NAV BAR ─── */}
           <div className="border-b border-slate-200/60 bg-white/90 px-4 py-3 dark:border-white/5 dark:bg-[#0D1526]/80 lg:hidden">
@@ -196,7 +158,11 @@ export default function MainLayout({ children }: MainLayoutProps) {
             )}
           </div>
 
-          <section className="p-4 text-slate-900 dark:text-white md:p-8">
+          <div className="flex justify-end px-4 pt-3 md:px-8">
+            <ThemeToggle />
+          </div>
+
+          <section className="px-4 pb-4 pt-2 text-slate-900 dark:text-white md:px-8 md:pb-8 md:pt-4">
             {children}
           </section>
         </main>

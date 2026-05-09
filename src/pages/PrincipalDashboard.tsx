@@ -109,14 +109,13 @@ export default function PrincipalDashboard() {
   return (
     <MainLayout>
       {/* Welcome Banner */}
-      <div className="mb-8 rounded-[2rem] border border-slate-200/60 bg-gradient-to-r from-white to-white p-8 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-gold-600/8 dark:from-navy dark:via-navy-700 dark:to-navy dark:text-white">
-        <p className="text-sm font-semibold uppercase tracking-wider text-gold-600 dark:text-gold-400">
+      <div className="mb-8">
+        <h1 className="text-4xl font-black text-slate-900 dark:text-white">
           Principal Dashboard
-        </p>
-        <h1 className="mt-2 font-display text-4xl font-black">{data.name}</h1>
-        <p className="mt-2 text-slate-500 dark:text-slate-400">
-          Institution-wide analytics, academic health monitoring, leave overview
-          and smart alerts.
+        </h1>
+
+        <p className="mt-2 text-lg text-slate-600 dark:text-slate-400">
+          Welcome back, {data.name} 👋
         </p>
       </div>
 

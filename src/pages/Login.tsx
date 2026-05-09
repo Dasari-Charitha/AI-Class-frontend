@@ -6,17 +6,42 @@ import ThemeToggle from "../components/ThemeToggle";
 
 type Role = "student" | "teacher" | "hod" | "principal";
 
+const demoCredentials: Record<Role, { email: string; password: string }> = {
+  student: {
+    email: "student@demo.com",
+    password: "student123",
+  },
+  teacher: {
+    email: "teacher@demo.com",
+    password: "teacher123",
+  },
+  hod: {
+    email: "hod@demo.com",
+    password: "hod123",
+  },
+  principal: {
+    email: "principal@demo.com",
+    password: "principal123",
+  },
+};
+
 export default function Login() {
   const [role, setRoleState] = useState<Role>("student");
   const [hodBranch, setHodBranch] = useState("cse");
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(demoCredentials.student.email);
+  const [password, setPassword] = useState(demoCredentials.student.password);
   const [showPassword, setShowPassword] = useState(false);
 
   const { loginWithGoogle, setRole, resetPassword } = useAuth();
 
   const navigate = useNavigate();
+
+  const handleRoleChange = (selectedRole: Role) => {
+    setRoleState(selectedRole);
+    setEmail(demoCredentials[selectedRole].email);
+    setPassword(demoCredentials[selectedRole].password);
+  };
 
   const handleGoogleLogin = async () => {
     await loginWithGoogle();
@@ -33,8 +58,10 @@ export default function Login() {
   const handleEmailLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      alert("Please enter email and password");
+    const currentDemo = demoCredentials[role];
+
+    if (email !== currentDemo.email || password !== currentDemo.password) {
+      alert(`Please use the demo credentials for ${role}.`);
       return;
     }
 
@@ -70,9 +97,7 @@ export default function Login() {
       {/* Background Glow */}
       <div className="absolute inset-0">
         <div className="absolute left-20 top-20 h-72 w-72 rounded-full bg-gold-500/10 blur-3xl"></div>
-
         <div className="absolute bottom-20 right-20 h-80 w-80 rounded-full bg-accent-blue/8 blur-3xl dark:bg-accent-blue/12"></div>
-
         <div className="absolute left-1/2 top-1/3 h-48 w-48 -translate-x-1/2 rounded-full bg-gold-300/5 blur-3xl"></div>
       </div>
 
@@ -122,77 +147,53 @@ export default function Login() {
           Sign in to continue your AI classroom journey
         </p>
 
-        {/* Role Select */}
-        <select
-          value={role}
-          onChange={(e) => setRoleState(e.target.value as Role)}
-          className="mb-4 w-full rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-gold-600/15 dark:bg-[#0D1526] dark:text-white"
-        >
-          <option
-            className="bg-white text-black dark:bg-[#0D1526] dark:text-white"
-            value="student"
-          >
-            Student
-          </option>
-
-          <option
-            className="bg-white text-black dark:bg-[#0D1526] dark:text-white"
-            value="teacher"
-          >
-            Teacher
-          </option>
-
-          <option
-            className="bg-white text-black dark:bg-[#0D1526] dark:text-white"
-            value="hod"
-          >
-            HOD
-          </option>
-
-          <option
-            className="bg-white text-black dark:bg-[#0D1526] dark:text-white"
-            value="principal"
-          >
-            Principal
-          </option>
-        </select>
-
-        {/* HOD Branch */}
+        {/* HOD Department Select */}
         {role === "hod" && (
-          <select
-            value={hodBranch}
-            onChange={(e) => setHodBranch(e.target.value)}
-            className="mb-4 w-full rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-gold-600/15 dark:bg-[#0D1526] dark:text-white"
-          >
-            <option
-              className="bg-white text-black dark:bg-[#0D1526] dark:text-white"
-              value="cse"
-            >
-              CSE HOD
-            </option>
+          <div className="mb-4">
+            <p className="mb-2 text-sm font-semibold text-slate-400">
+              Select Department
+            </p>
 
-            <option
-              className="bg-white text-black dark:bg-[#0D1526] dark:text-white"
-              value="ece"
+            <select
+              value={hodBranch}
+              onChange={(e) => setHodBranch(e.target.value)}
+              className="w-full rounded-xl border border-slate-300 bg-white p-3 text-slate-900 outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/30 dark:border-gold-600/15 dark:bg-[#0D1526] dark:text-white"
             >
-              ECE HOD
-            </option>
-
-            <option
-              className="bg-white text-black dark:bg-[#0D1526] dark:text-white"
-              value="eee"
-            >
-              EEE HOD
-            </option>
-
-            <option
-              className="bg-white text-black dark:bg-[#0D1526] dark:text-white"
-              value="mech"
-            >
-              MECH HOD
-            </option>
-          </select>
+              <option value="cse">CSE Department</option>
+              <option value="ece">ECE Department</option>
+              <option value="eee">EEE Department</option>
+              <option value="mech">MECH Department</option>
+            </select>
+         </div>
         )}
+
+        {/* Quick Demo Login */}
+        <div className="mb-5 rounded-2xl border border-slate-200 bg-slate-100 p-4 shadow-sm dark:border-gold-600/15 dark:bg-[#0D1526]/80">
+          <p className="mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">
+            Quick Demo Login
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            {Object.keys(demoCredentials).map((demoRole) => (
+              <button
+                key={demoRole}
+                type="button"
+                onClick={() => handleRoleChange(demoRole as Role)}
+                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition-all duration-300
+                ${
+                  role === demoRole
+                    ? "border-gold-500 bg-gold-100 text-gold-700 shadow-lg shadow-gold-500/10 dark:border-gold-400 dark:bg-gold-500/20 dark:text-gold-300"
+                    : "border-slate-300 bg-white text-slate-700 hover:border-gold-400 hover:bg-gold-50 hover:text-gold-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:border-gold-500/30 dark:hover:bg-gold-500/10 dark:hover:text-gold-300"
+                }`}
+              >
+                {demoRole === "student" && "🎓 Student"}
+                {demoRole === "teacher" && "👨‍🏫 Teacher"}
+                {demoRole === "hod" && "🏛️ HOD"}
+                {demoRole === "principal" && "👑 Principal"}
+              </button>
+            ))}
+          </div>
+        </div>
 
         {/* Google Login */}
         <button
@@ -204,18 +205,13 @@ export default function Login() {
             alt="Google"
             className="h-5 w-5"
           />
-
           Continue with Google
         </button>
 
         {/* Divider */}
         <div className="my-5 flex items-center gap-3">
           <div className="h-px flex-1 bg-slate-300 dark:bg-white/20"></div>
-
-          <span className="text-sm text-slate-500 dark:text-slate-400">
-            OR
-          </span>
-
+          <span className="text-sm text-slate-500 dark:text-slate-400">OR</span>
           <div className="h-px flex-1 bg-slate-300 dark:bg-white/20"></div>
         </div>
 
@@ -271,7 +267,7 @@ export default function Login() {
             type="submit"
             className="w-full rounded-xl bg-gradient-to-r from-gold-600 to-gold-400 py-3 font-bold text-navy-900 shadow-lg shadow-gold-600/20 transition hover:scale-105 hover:shadow-gold-600/30"
           >
-            Login
+            Login as {role.charAt(0).toUpperCase() + role.slice(1)}
           </button>
         </form>
 

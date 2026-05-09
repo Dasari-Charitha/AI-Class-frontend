@@ -183,16 +183,13 @@ export default function StudentDashboard() {
   return (
     <MainLayout>
       {/* Welcome Banner */}
-      <div className="mb-8 rounded-[2rem] border border-slate-200/60 bg-white/90 p-8 text-slate-900 shadow-2xl backdrop-blur-xl dark:border-gold-600/8 dark:bg-gradient-to-r dark:from-navy dark:via-navy-700 dark:to-navy dark:text-white">
-        <p className="text-sm font-semibold uppercase tracking-wider text-gold-600 dark:text-gold-400 dark:text-gold-300">
+      <div className="mb-8">
+        <h1 className="text-4xl font-black text-slate-900 dark:text-white">
           Student Dashboard
-        </p>
-        <h1 className="mt-2 font-display text-4xl font-black">
-          Welcome, {data.name}
         </h1>
-        <p className="mt-2 text-slate-500 dark:text-gold-200/80">
-          Today is {dayStatus.dayName}, {dayStatus.fullDate}. Here is your smart
-          academic overview.
+
+        <p className="mt-2 text-lg text-slate-600 dark:text-slate-400">
+          Welcome back, {data.name} 👋
         </p>
       </div>
 
