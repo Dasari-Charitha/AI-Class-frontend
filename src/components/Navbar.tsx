@@ -51,7 +51,7 @@ export default function Navbar({ setSidebarOpen }: NavbarProps) {
 
         <button
           onClick={handleLogout}
-          className="bg-[#FFD700] text-black px-3 md:px-4 py-2 rounded-lg hover:bg-yellow-300 transition text-sm"
+          className="bg-blue-500 text-white px-3 md:px-4 py-2 rounded-lg hover:bg-blue-400 transition text-sm"
         >
           Logout
         </button>

@@ -35,8 +35,8 @@ export default function Notifications({ department }: NotificationsProps) {
       ];
 
   return (
-    <div className="card-hover rounded-2xl border border-slate-200/60 bg-white p-6 shadow-card dark:border-gold-600/8 dark:bg-[#111B33]">
-      <h2 className="mb-3 text-xl font-bold text-gold-600 dark:text-gold-400">
+    <div className="card-hover rounded-2xl border border-slate-200/60 bg-white p-6 shadow-card dark:border-blue-500/10 dark:bg-[#0C1330]">
+      <h2 className="mb-3 text-xl font-bold text-gold-600 dark:text-blue-400">
         Notifications
       </h2>
 
@@ -44,7 +44,7 @@ export default function Notifications({ department }: NotificationsProps) {
         {notifications.map((note, i) => (
           <li
             key={i}
-            className="card-hover rounded-xl bg-slate-50 px-3 py-2 dark:bg-[#0D1526]"
+            className="card-hover rounded-xl bg-slate-50 px-3 py-2 dark:bg-[#111B44]"
           >
             • {note}
           </li>

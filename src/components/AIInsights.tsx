@@ -56,8 +56,8 @@ export default function AIInsights({ role, department }: AIInsightsProps) {
       : insights[role];
 
   return (
-    <div className="card-hover mt-8 rounded-3xl border border-slate-200/60 bg-white/90 p-6 text-slate-900 shadow-card backdrop-blur-xl dark:border-gold-600/8 dark:bg-[#111B33] dark:text-white">
-      <h2 className="mb-4 text-xl font-black text-gold-600 dark:text-gold-400">
+    <div className="card-hover mt-8 rounded-3xl border border-slate-200/60 bg-white/90 p-6 text-slate-900 shadow-card backdrop-blur-xl dark:border-blue-500/10 dark:bg-[#0C1330] dark:text-white">
+      <h2 className="mb-4 text-xl font-black text-gold-600 dark:text-blue-400">
         AI Insights
       </h2>
 
@@ -65,7 +65,7 @@ export default function AIInsights({ role, department }: AIInsightsProps) {
         {selectedInsights.map((item, index) => (
           <li
             key={index}
-            className="card-hover rounded-2xl border border-slate-200/40 bg-slate-50 p-4 text-slate-700 dark:border-gold-600/8 dark:bg-[#0D1526] dark:text-white"
+            className="card-hover rounded-2xl border border-slate-200/40 bg-slate-50 p-4 text-slate-700 dark:border-blue-500/10 dark:bg-[#111B44] dark:text-white"
           >
             {item}
           </li>
