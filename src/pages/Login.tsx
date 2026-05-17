@@ -39,22 +39,36 @@ export default function Login() {
 
   const handleGoogleLogin = async () => {
     await loginWithGoogle();
+
     setRole(role);
-    if (role === "hod") localStorage.setItem("hodBranch", hodBranch);
-    navigate(`/${role}`);
+    localStorage.setItem("role", role);
+
+    if (role === "hod") {
+      localStorage.setItem("hodBranch", hodBranch);
+    }
+
+    navigate(`/${role}`, { replace: true });
   };
 
   const handleEmailLogin = (e: React.FormEvent) => {
     e.preventDefault();
+
     const currentDemo = demoCredentials[role];
+
     if (email !== currentDemo.email || password !== currentDemo.password) {
       alert(`Please use the demo credentials for ${role}.`);
       return;
     }
+
     setRole(role);
-    if (role === "hod") localStorage.setItem("hodBranch", hodBranch);
+    localStorage.setItem("role", role);
+
+    if (role === "hod") {
+      localStorage.setItem("hodBranch", hodBranch);
+    }
+
     alert("Login successful!");
-    navigate(`/${role}`);
+    navigate(`/${role}`, { replace: true });
   };
 
   const handleForgotPassword = async () => {
@@ -83,7 +97,7 @@ export default function Login() {
 
           {/* Top Logo Area (Big, Centered, No Box) */}
           <div className="mt-4 flex flex-col items-center justify-center">
-            <img src="/logo.jpg" alt="Logo" className="h-20 w-20 object-contain" />
+            <img src="/logo.svg" alt="Logo" className="h-20 w-20 object-contain" />
             <span className="mt-3 font-display text-2xl font-black text-white tracking-wide">AI Classroom</span>
           </div>
 
