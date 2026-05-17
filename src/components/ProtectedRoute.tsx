@@ -11,9 +11,15 @@ export default function ProtectedRoute({
 }) {
   const { user, role: userRole } = useAuth();
 
-  if (!user) return <Navigate to="/login" replace />;
+  const savedRole = localStorage.getItem("role");
 
-  if (userRole !== role) return <Navigate to="/login" replace />;
+  if (!user && savedRole !== role) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user && userRole !== role && savedRole !== role) {
+    return <Navigate to="/login" replace />;
+  }
 
   return <>{children}</>;
 }
