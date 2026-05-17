@@ -106,7 +106,7 @@ export default function Charts({ title1, title2, data }: ChartProps) {
               />
 
               <Bar dataKey="value" radius={[8, 8, 0, 0]}>
-                {chartData.map((entry, index) => (
+                {chartData.map((_entry, index) => (
                   <Cell key={`cell-${index}`} fill={getBarColor(index)} />
                 ))}
               </Bar>

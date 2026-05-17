@@ -87,7 +87,6 @@ export default function TeacherDashboard() {
   const [activeTab, setActiveTab] = useState<TabType>("dashboard");
   const [data, setData] = useState<TeacherData | null>(null);
   const [leaves, setLeaves] = useState<LeaveRequest[]>([]);
-  const [examCreationMode, setExamCreationMode] = useState<"manual" | "ai">("manual");
   const [examType, setExamType] = useState("same");
   const [generatedExamCode, setGeneratedExamCode] = useState<string | null>(null);
 

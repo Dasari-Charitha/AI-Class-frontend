@@ -1,6 +1,6 @@
 import { useTheme } from '../context/ThemeContext';
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 
 import styles from './Landing.module.css';
@@ -105,16 +105,6 @@ export default function LandingPage() {
     const t = setTimeout(tick, 600);
     return () => clearTimeout(t);
   }, []);
-
-  /* Card tilt */
-  const tilt = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - 0.5;
-    const y = (e.clientY - r.top) / r.height - 0.5;
-    el.style.transform = `perspective(600px) rotateY(${x * 18}deg) rotateX(${-y * 18}deg) translateZ(8px)`;
-  };
-  const resetTilt = (e: React.MouseEvent<HTMLDivElement>) => { e.currentTarget.style.transform = ''; };
 
   return (
     <main className={styles.wrapper}>
